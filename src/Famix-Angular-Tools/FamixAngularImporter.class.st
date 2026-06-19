@@ -10,34 +10,18 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-FamixAngularImporter >> componentClasses [
-
-	^ tsModel allModelClasses select: [ :each |
-		  each decorators anySatisfy: [ :d | d name = '@Component' ] ]
+FamixAngularImporter >> entityImporters [
+	^ (FamixAngularEntityImporter allSubclasses reject: [ :c | c isAbstract ])
+		collect: [ :c | c new ]
 ]
 
 { #category : 'as yet unclassified' }
-FamixAngularImporter >> createComponents [
-    self componentClasses do: [ :tsClass |
-        | component |
-        component := FamixAngularComponent new.
-        component name: tsClass name.
-        component implementingClass: tsClass.   "reverse accessor #angularType on the TS class"
-        component selector: (self selectorOf: tsClass).
-        angularModel add: component ]
-]
+FamixAngularImporter >> importAngularModelFrom: aTSModel [
+	tsModel := aTSModel.
+	angularModel := FamixAngularModel new.
+	self entityImporters do: [ :imp |
+		imp tsModel: tsModel angularModel: angularModel; run ].
+	"self importRelations.  <- the second phase, added later"
+	^ angularModel
 
-{ #category : 'as yet unclassified' }
-FamixAngularImporter >> importComponentsFrom: aTSModel [
-    tsModel := aTSModel.
-    angularModel := FamixAngularModel new.
-    self createComponents.
-    ^ angularModel
-]
-
-{ #category : 'accessing' }
-FamixAngularImporter >> selectorOf: tsClass [
-    "Depends on whether ts2famix modeled the @Component argument object.
-     Returns nil if not available — adapt once you've inspected a decorator."
-    ^ nil
 ]
