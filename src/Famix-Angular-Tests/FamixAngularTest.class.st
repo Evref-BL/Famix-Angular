@@ -47,3 +47,14 @@ FamixAngularTest >> testComponent [
 	self assert: component implementingClass equals: tsClass.
 	self assert: tsClass angularType equals: component
 ]
+
+{ #category : 'tests' }
+FamixAngularTest >> testDirective [
+	| directive tsClass |
+	directive := FamixAngularDirective new name: 'HighlightDirective'.
+	self assert: directive name equals: 'HighlightDirective'.
+	tsClass := FamixTypeScriptClass new name: 'HighlightDirective'.
+	directive implementingClass: tsClass.
+	self assert: directive implementingClass equals: tsClass.
+	self assert: tsClass angularType equals: directive
+]
