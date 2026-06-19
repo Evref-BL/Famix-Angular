@@ -23,7 +23,7 @@ BaselineOfFamixAngular >> defineDependencies: spec [
 	spec baseline: 'FamixTypeScript' with: [
 		spec
 			loads: #( 'default' );
-			repository: 'github://fuhrmanator/FamixTypeScript:main/src' ] 
+			repository: 'github://evref-bl/FamixTypeScript:master/src' ] 
 ]
 
 { #category : 'baselines' }
