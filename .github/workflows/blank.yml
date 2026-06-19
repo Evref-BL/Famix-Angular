@@ -1,0 +1,64 @@
+name: CI
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+on:
+  push:
+    branches:
+      - main
+      - v*
+  pull_request:
+    branches:
+      - main
+      - v*
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        smalltalk: [ Pharo64-12, Pharo64-13, Pharo64-14 ]
+    runs-on: ubuntu-latest
+    name: ${{ matrix.smalltalk }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: tree-sitter/setup-action@v2
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libssl-dev clang libsodium-dev zlib1g-dev
+
+      - uses: hpi-swa/setup-smalltalkCI@v1
+        with:
+          smalltalk-image: ${{ matrix.smalltalk }}
+
+      - name: Run tests
+        run: smalltalkci -s ${{ matrix.smalltalk }}
+        shell: bash
+        timeout-minutes: 20
+
+      - name: Upload test artifacts (if any)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts-${{ matrix.smalltalk }}
+          path: |
+            *.log
+            TestResult*.xml
+            reports/**
+          if-no-files-found: ignore
+
+      # Optional: enable when you want coverage publishing
+      # - name: Coveralls
+      #   uses: coverallsapp/github-action@v2
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
