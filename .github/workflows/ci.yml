@@ -19,12 +19,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  build:
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         smalltalk: [ Pharo64-12, Pharo64-13, Pharo64-14 ]
-    runs-on: ubuntu-latest
     name: ${{ matrix.smalltalk }}
 
     steps:
@@ -32,33 +32,43 @@ jobs:
 
       - uses: tree-sitter/setup-action@v2
 
-      - name: Install system dependencies
+      - name: Install SSL dependencies
+        run: sudo apt-get update && sudo apt-get install -y libssl-dev clang libsodium-dev zlib1g-dev
+
+      # Helps when any dependency is private or requires authenticated HTTPS
+      - name: Configure git for GitHub token auth
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libssl-dev clang libsodium-dev zlib1g-dev
+          git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+          git config --global --list | sed 's/x-access-token:.*/x-access-token:***@github.com\//'
 
       - uses: hpi-swa/setup-smalltalkCI@v1
         with:
           smalltalk-image: ${{ matrix.smalltalk }}
 
-      - name: Run tests
-        run: smalltalkci -s ${{ matrix.smalltalk }}
-        shell: bash
-        timeout-minutes: 20
+      - name: Verify smalltalkCI config
+        run: |
+          ls -la
+          test -f .smalltalk.ston || (echo "Missing .smalltalk.ston" && exit 1)
+          echo "----- .smalltalk.ston -----"
+          cat .smalltalk.ston
 
-      - name: Upload test artifacts (if any)
+      - name: Run smalltalkCI (verbose debug)
+        shell: bash
+        timeout-minutes: 25
+        run: |
+          set -o pipefail
+          mkdir -p ci-logs
+          echo "Running on ${{ matrix.smalltalk }}"
+          smalltalkci -s ${{ matrix.smalltalk }} 2>&1 | tee ci-logs/smalltalkci-${{ matrix.smalltalk }}.log
+
+      - name: Upload debug logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-artifacts-${{ matrix.smalltalk }}
+          name: ci-debug-${{ matrix.smalltalk }}
           path: |
+            ci-logs/**
             *.log
             TestResult*.xml
             reports/**
           if-no-files-found: ignore
-
-      # Optional: enable when you want coverage publishing
-      # - name: Coveralls
-      #   uses: coverallsapp/github-action@v2
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
