@@ -58,3 +58,30 @@ FamixAngularTest >> testDirective [
 	self assert: directive implementingClass equals: tsClass.
 	self assert: tsClass angularType equals: directive
 ]
+
+{ #category : 'tests' }
+FamixAngularTest >> testPipe [
+
+	| pipe tsClass |
+	
+	pipe := FamixAngularPipe new name: 'CurrencyPipe'.
+	self assert: pipe name equals: 'CurrencyPipe'.
+	
+	tsClass := FamixTypeScriptClass new name: 'CurrencyPipe'.
+	pipe implementingClass: tsClass.
+	self assert: pipe implementingClass equals: tsClass.
+	self assert: tsClass angularType equals: pipe
+]
+
+{ #category : 'tests' }
+FamixAngularTest >> testService [
+
+	| service tsClass |
+	service := FamixAngularService new name: 'DataService'.
+	self assert: service name equals: 'DataService'.
+	
+	tsClass := FamixTypeScriptClass new name: 'DataService'.
+	service implementingClass: tsClass.
+	self assert: service implementingClass equals: tsClass.
+	self assert: tsClass angularType equals: service
+]
