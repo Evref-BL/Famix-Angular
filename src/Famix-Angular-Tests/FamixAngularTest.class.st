@@ -6,6 +6,30 @@ Class {
 }
 
 { #category : 'tests' }
+FamixAngularTest >> testAngularModel [
+
+	| model |
+	
+	"ok for the moment I created the test with these entities as they are handled in the importer. perhaps will modify it later when other entities are added"
+	
+	model := FamixAngularModel new.
+	model
+		add: (FamixAngularComponent new name: 'AppComponent');
+		add: (FamixAngularService new name: 'DataService');
+		add: (FamixAngularPipe new name: 'CurrencyPipe');
+		add: (FamixAngularDirective new name: 'HighlightDirective').
+	self
+		assert: (model allWithType: FamixAngularComponent) size
+		equals: 1.
+	self assert: (model allWithType: FamixAngularService) size equals: 1.
+	self assert: (model allWithType: FamixAngularPipe) size equals: 1.
+	self
+		assert: (model allWithType: FamixAngularDirective) size
+		equals: 1.
+	self assert: model numberOfEntities equals: 4
+]
+
+{ #category : 'tests' }
 FamixAngularTest >> testComponent [
 
 	| component tsClass |
