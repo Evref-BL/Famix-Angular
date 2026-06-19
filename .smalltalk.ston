@@ -1,0 +1,16 @@
+SmalltalkCISpec {
+  #loading : [
+    SCIMetacelloLoadSpec {
+      #baseline : 'FamixAngular',
+      #directory : 'src',
+      #onConflict : #useIncoming,
+      #onUpgrade : #useIncoming,
+      #ignoreImage : true
+    }
+  ],
+  #testing : {
+    #packages : [
+      'Famix-Angular-Tests'
+    ]
+  }
+}
