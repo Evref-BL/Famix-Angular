@@ -60,6 +60,19 @@ FamixAngularTest >> testDirective [
 ]
 
 { #category : 'tests' }
+FamixAngularTest >> testNgModule [
+
+	| ngModule tsClass |
+	ngModule := FamixAngularNgModule new name: 'DataModule'.
+	self assert: ngModule name equals: 'DataModule'.
+
+	tsClass := FamixTypeScriptClass new name: 'DataModule'.
+	ngModule implementingClass: tsClass.
+	self assert: ngModule implementingClass equals: tsClass.
+	self assert: tsClass angularType equals: ngModule
+]
+
+{ #category : 'tests' }
 FamixAngularTest >> testPipe [
 
 	| pipe tsClass |
