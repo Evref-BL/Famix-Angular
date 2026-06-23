@@ -41,17 +41,19 @@ FamixAngularGenerator class >> submetamodels [
 
 { #category : 'definition' }
 FamixAngularGenerator >> defineClasses [
-	super defineClasses. 
-	
-    angularEntity := builder newClassNamed: #AngularEntity.   
-    angularType   := builder newClassNamed: #AngularType. 
-    ngModule      := builder newClassNamed: #NgModule.
-    component     := builder newClassNamed: #Component.
-    directive     := builder newClassNamed: #Directive.
-    pipe          := builder newClassNamed: #Pipe.
-    service       := builder newClassNamed: #Service.
-    template      := builder newClassNamed: #Template.
-    route         := builder newClassNamed: #Route.
+
+	super defineClasses.
+
+	angularEntity := builder newClassNamed: #Entity.
+	angularType := builder newClassNamed: #Type.
+	ngModule := builder newClassNamed: #NgModule.
+	component := builder newClassNamed: #Component.
+	directive := builder newClassNamed: #Directive.
+	pipe := builder newClassNamed: #Pipe.
+	service := builder newClassNamed: #Service.
+	 
+	template := builder newClassNamed: #Template. "Template represents a component's view: the HTML that Angular renders for that component. "
+	route := builder newClassNamed: #Route "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
 ]
 
 { #category : 'definition' }
@@ -86,7 +88,12 @@ FamixAngularGenerator >> defineProperties [
 	pipe property: #pipeName type: #String.
 	template property: #isInline type: #Boolean.
 	template property: #templateUrl type: #String.
-	route property: #path type: #String
+	route property: #path type: #String.
+	
+"aless: for the moment I don't see why we need this for something else other than angulartype"
+	angularType property: #ast type: #Object
+
+
 ]
 
 { #category : 'definition' }

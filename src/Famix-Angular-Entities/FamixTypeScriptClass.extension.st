@@ -2,11 +2,11 @@ Extension { #name : 'FamixTypeScriptClass' }
 
 { #category : '*Famix-Angular-Entities-accessing' }
 FamixTypeScriptClass >> angularType [
-	"Relation named: #angularType type: #FamixAngularAngularType opposite: #implementingClass"
+	"Relation named: #angularType type: #FamixAngularType opposite: #implementingClass"
 
 	<generated>
 	<derived>
-	<FMProperty: #angularType type: #FamixAngularAngularType opposite: #implementingClass>
+	<FMProperty: #angularType type: #FamixAngularType opposite: #implementingClass>
 	<package: #'Famix-Angular-Entities'>
 	^ self attributeAt: #angularType ifAbsent: [ nil ]
 ]

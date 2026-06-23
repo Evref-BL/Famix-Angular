@@ -15,9 +15,10 @@ FamixAngularRelationImporter class >> isAbstract [
 ]
 
 { #category : 'as yet unclassified' }
-FamixAngularRelationImporter >> allAngularTypes [  
-	^ FamixAngularAngularType withAllSubclasses
-		flatCollect: [ :cls | angularModel allWithType: cls ] 
+FamixAngularRelationImporter >> allAngularTypes [
+
+	^ FamixAngularType withAllSubclasses flatCollect: [ :cls |
+		  angularModel allWithType: cls ]
 ]
 
 { #category : 'running' }

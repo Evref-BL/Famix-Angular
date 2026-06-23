@@ -25,7 +25,7 @@
 "
 Class {
 	#name : 'FamixAngularComponent',
-	#superclass : 'FamixAngularAngularType',
+	#superclass : 'FamixAngularType',
 	#traits : 'FamixAngularTDeclarable',
 	#classTraits : 'FamixAngularTDeclarable classTrait',
 	#instVars : [
@@ -42,7 +42,7 @@ Class {
 { #category : 'meta' }
 FamixAngularComponent class >> annotation [
 
-	<FMClass: #Component super: #FamixAngularAngularType>
+	<FMClass: #Component super: #FamixAngularType>
 	<package: #FamixAngular>
 	<generated>
 	^ self

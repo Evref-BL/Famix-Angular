@@ -1,16 +1,17 @@
 Class {
 	#name : 'FamixAngularNgModuleImporter',
-	#superclass : 'FamixAngularDecoratedImporter',
+	#superclass : 'FamixAngularTypesImporter',
 	#category : 'Famix-Angular-Tools',
 	#package : 'Famix-Angular-Tools'
 }
 
 { #category : 'instance creation' }
-FamixAngularNgModuleImporter >> createFrom: aTSClass [  
+FamixAngularNgModuleImporter >> basicCreateFrom: aTSClass [
+
 	^ FamixAngularNgModule new
-		name: aTSClass name;
-		implementingClass: aTSClass;
-		yourself 
+		  name: aTSClass name;
+		  implementingClass: aTSClass;
+		  yourself
 ]
 
 { #category : 'as yet unclassified' }

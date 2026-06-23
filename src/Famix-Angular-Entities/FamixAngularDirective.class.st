@@ -12,7 +12,7 @@
 "
 Class {
 	#name : 'FamixAngularDirective',
-	#superclass : 'FamixAngularAngularType',
+	#superclass : 'FamixAngularType',
 	#traits : 'FamixAngularTDeclarable',
 	#classTraits : 'FamixAngularTDeclarable classTrait',
 	#category : 'Famix-Angular-Entities-Entities',
@@ -23,7 +23,7 @@ Class {
 { #category : 'meta' }
 FamixAngularDirective class >> annotation [
 
-	<FMClass: #Directive super: #FamixAngularAngularType>
+	<FMClass: #Directive super: #FamixAngularType>
 	<package: #FamixAngular>
 	<generated>
 	^ self

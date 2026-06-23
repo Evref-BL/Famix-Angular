@@ -18,7 +18,7 @@
 "
 Class {
 	#name : 'FamixAngularPipe',
-	#superclass : 'FamixAngularAngularType',
+	#superclass : 'FamixAngularType',
 	#traits : 'FamixAngularTDeclarable',
 	#classTraits : 'FamixAngularTDeclarable classTrait',
 	#instVars : [
@@ -32,7 +32,7 @@ Class {
 { #category : 'meta' }
 FamixAngularPipe class >> annotation [
 
-	<FMClass: #Pipe super: #FamixAngularAngularType>
+	<FMClass: #Pipe super: #FamixAngularType>
 	<package: #FamixAngular>
 	<generated>
 	^ self

@@ -18,7 +18,7 @@
 "
 Class {
 	#name : 'FamixAngularRoute',
-	#superclass : 'FamixAngularAngularEntity',
+	#superclass : 'FamixAngularEntity',
 	#instVars : [
 		'#path => FMProperty',
 		'#targetComponent => FMMany type: #FamixAngularComponent opposite: #routes'
@@ -31,7 +31,7 @@ Class {
 { #category : 'meta' }
 FamixAngularRoute class >> annotation [
 
-	<FMClass: #Route super: #FamixAngularAngularEntity>
+	<FMClass: #Route super: #FamixAngularEntity>
 	<package: #FamixAngular>
 	<generated>
 	^ self

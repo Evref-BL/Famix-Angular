@@ -15,7 +15,7 @@
 "
 Class {
 	#name : 'FamixAngularNgModule',
-	#superclass : 'FamixAngularAngularType',
+	#superclass : 'FamixAngularType',
 	#instVars : [
 		'#declarations => FMMany type: #FamixAngularTDeclarable opposite: #declaringModule',
 		'#importedModules => FMMany type: #FamixAngularNgModule opposite: #importingModules',
@@ -30,7 +30,7 @@ Class {
 { #category : 'meta' }
 FamixAngularNgModule class >> annotation [
 
-	<FMClass: #NgModule super: #FamixAngularAngularType>
+	<FMClass: #NgModule super: #FamixAngularType>
 	<package: #FamixAngular>
 	<generated>
 	^ self

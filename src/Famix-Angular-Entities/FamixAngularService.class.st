@@ -5,7 +5,7 @@
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
 |---|
-| `injectingClients` | `FamixAngularService` | `injectedServices` | `FamixAngularAngularType` | |
+| `injectingClients` | `FamixAngularService` | `injectedServices` | `FamixAngularType` | |
 | `providingModules` | `FamixAngularService` | `providedServices` | `FamixAngularNgModule` | |
 
 
@@ -13,10 +13,10 @@
 "
 Class {
 	#name : 'FamixAngularService',
-	#superclass : 'FamixAngularAngularType',
+	#superclass : 'FamixAngularType',
 	#instVars : [
 		'#providingModules => FMMany type: #FamixAngularNgModule opposite: #providedServices',
-		'#injectingClients => FMMany type: #FamixAngularAngularType opposite: #injectedServices'
+		'#injectingClients => FMMany type: #FamixAngularType opposite: #injectedServices'
 	],
 	#category : 'Famix-Angular-Entities-Entities',
 	#package : 'Famix-Angular-Entities',
@@ -26,7 +26,7 @@ Class {
 { #category : 'meta' }
 FamixAngularService class >> annotation [
 
-	<FMClass: #Service super: #FamixAngularAngularType>
+	<FMClass: #Service super: #FamixAngularType>
 	<package: #FamixAngular>
 	<generated>
 	^ self
@@ -46,7 +46,7 @@ FamixAngularService >> addProvidingModule: anObject [
 
 { #category : 'accessing' }
 FamixAngularService >> injectingClients [
-	"Relation named: #injectingClients type: #FamixAngularAngularType opposite: #injectedServices"
+	"Relation named: #injectingClients type: #FamixAngularType opposite: #injectedServices"
 
 	<generated>
 	^ injectingClients

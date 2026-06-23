@@ -24,7 +24,7 @@
 "
 Class {
 	#name : 'FamixAngularTemplate',
-	#superclass : 'FamixAngularAngularEntity',
+	#superclass : 'FamixAngularEntity',
 	#instVars : [
 		'#isInline => FMProperty',
 		'#templateUrl => FMProperty',
@@ -39,7 +39,7 @@ Class {
 { #category : 'meta' }
 FamixAngularTemplate class >> annotation [
 
-	<FMClass: #Template super: #FamixAngularAngularEntity>
+	<FMClass: #Template super: #FamixAngularEntity>
 	<package: #FamixAngular>
 	<generated>
 	^ self

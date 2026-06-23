@@ -21,27 +21,6 @@ FamixAngularTEntityCreator classSide >> annotation [
 ]
 
 { #category : 'entity creation' }
-FamixAngularTEntityCreator >> newAngularEntity [
-
-	<generated>
-	^ self add: FamixAngularAngularEntity new
-]
-
-{ #category : 'entity creation' }
-FamixAngularTEntityCreator >> newAngularEntityNamed: aName [
-
-	<generated>
-	^ self add: (FamixAngularAngularEntity named: aName)
-]
-
-{ #category : 'entity creation' }
-FamixAngularTEntityCreator >> newAngularType [
-
-	<generated>
-	^ self add: FamixAngularAngularType new
-]
-
-{ #category : 'entity creation' }
 FamixAngularTEntityCreator >> newComment [
 
 	<generated>
@@ -109,4 +88,11 @@ FamixAngularTEntityCreator >> newTemplate [
 
 	<generated>
 	^ self add: FamixAngularTemplate new
+]
+
+{ #category : 'entity creation' }
+FamixAngularTEntityCreator >> newType [
+
+	<generated>
+	^ self add: FamixAngularType new
 ]

@@ -5,16 +5,23 @@
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
 |---|
-| `implementingClass` | `FamixAngularAngularType` | `angularType` | `FamixTypeScriptClass` | |
-| `injectedServices` | `FamixAngularAngularType` | `injectingClients` | `FamixAngularService` | |
+| `implementingClass` | `FamixAngularType` | `angularType` | `FamixTypeScriptClass` | |
+| `injectedServices` | `FamixAngularType` | `injectingClients` | `FamixAngularService` | |
 
 
+## Properties
+======================
+
+| Name | Type | Default value | Comment |
+|---|
+| `ast` | `Object` | nil | |
 
 "
 Class {
-	#name : 'FamixAngularAngularType',
-	#superclass : 'FamixAngularAngularEntity',
+	#name : 'FamixAngularType',
+	#superclass : 'FamixAngularEntity',
 	#instVars : [
+		'#ast => FMProperty',
 		'#injectedServices => FMMany type: #FamixAngularService opposite: #injectingClients'
 	],
 	#category : 'Famix-Angular-Entities-Entities',
@@ -23,22 +30,36 @@ Class {
 }
 
 { #category : 'meta' }
-FamixAngularAngularType class >> annotation [
+FamixAngularType class >> annotation [
 
-	<FMClass: #AngularType super: #FamixAngularAngularEntity>
+	<FMClass: #Type super: #FamixAngularEntity>
 	<package: #FamixAngular>
 	<generated>
 	^ self
 ]
 
 { #category : 'adding' }
-FamixAngularAngularType >> addInjectedService: anObject [
+FamixAngularType >> addInjectedService: anObject [
 	<generated>
 	^ self injectedServices add: anObject
 ]
 
 { #category : 'accessing' }
-FamixAngularAngularType >> implementingClass [
+FamixAngularType >> ast [
+
+	<FMProperty: #ast type: #Object>
+	<generated>
+	^ ast
+]
+
+{ #category : 'accessing' }
+FamixAngularType >> ast: anObject [
+	<generated>
+	ast := anObject
+]
+
+{ #category : 'accessing' }
+FamixAngularType >> implementingClass [
 	"Relation named: #implementingClass type: #FamixTypeScriptClass opposite: #angularType"
 
 	<generated>
@@ -47,7 +68,7 @@ FamixAngularAngularType >> implementingClass [
 ]
 
 { #category : 'accessing' }
-FamixAngularAngularType >> implementingClass: anObject [
+FamixAngularType >> implementingClass: anObject [
 
 	<generated>
 	(self attributeAt: #implementingClass ifAbsentPut: [nil]) == anObject ifTrue: [ ^ anObject ].
@@ -61,7 +82,7 @@ FamixAngularAngularType >> implementingClass: anObject [
 ]
 
 { #category : 'accessing' }
-FamixAngularAngularType >> injectedServices [
+FamixAngularType >> injectedServices [
 	"Relation named: #injectedServices type: #FamixAngularService opposite: #injectingClients"
 
 	<generated>
@@ -70,7 +91,7 @@ FamixAngularAngularType >> injectedServices [
 ]
 
 { #category : 'accessing' }
-FamixAngularAngularType >> injectedServices: anObject [
+FamixAngularType >> injectedServices: anObject [
 
 	<generated>
 	injectedServices value: anObject

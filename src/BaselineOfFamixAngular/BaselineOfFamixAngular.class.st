@@ -21,10 +21,13 @@ BaselineOfFamixAngular >> baseline: spec [
 { #category : 'baselines' }
 BaselineOfFamixAngular >> defineDependencies: spec [
 
-	spec baseline: 'FamixTypeScript' with: [
-		spec
-			loads: #( 'default' );
-			repository: 'github://fuhrmanator/FamixTypeScript:master/src' ]
+	spec 
+		baseline: 'FamixTypeScript' with: [
+			spec
+				loads: #( 'default' );
+				repository: 'github://fuhrmanator/FamixTypeScript:master/src' ];
+		baseline: 'FASTTypeScript' with: [
+			spec repository: 'github://moosetechnology/FASTTypescript:main' ]
 ]
 
 { #category : 'baselines' }
@@ -37,14 +40,15 @@ BaselineOfFamixAngular >> defineGroups: spec [
 ]
 
 { #category : 'baselines' }
-BaselineOfFamixAngular >> definePackages: spec [  
+BaselineOfFamixAngular >> definePackages: spec [
+
 	spec
 		package: 'Famix-Angular-Entities'
 			with: [ spec requires: #( 'FamixTypeScript' ) ];
 		package: 'Famix-Angular-Generator'
 			with: [ spec requires: #( 'FamixTypeScript' ) ];
 		package: 'Famix-Angular-Tools'
-			with: [ spec requires: #( 'Famix-Angular-Entities' ) ];
+			with: [ spec requires: #( 'Famix-Angular-Entities' 'FASTTypeScript' ) ];
 		package: 'Famix-Angular-Tests'
-			with: [ spec requires: #( 'Famix-Angular-Tools' ) ] 
+			with: [ spec requires: #( 'Famix-Angular-Tools' ) ]
 ]
