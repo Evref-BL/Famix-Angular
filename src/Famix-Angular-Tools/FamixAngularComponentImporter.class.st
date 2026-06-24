@@ -20,15 +20,71 @@ FamixAngularComponentImporter >> decoratorName [
 ]
 
 { #category : 'as yet unclassified' }
-FamixAngularComponentImporter >> fillMetadata: aComponent [
+FamixAngularComponentImporter >> extractStylesFor: aComponent in: ast [
+	
+	| styles cssParser |
+	
+	styles := OrderedCollection new.
+	cssParser := FASTCSSParser new .
+	(self readDecoratorArrayArgument: 'styles' in: ast)
+		do: [ :css | css ifNotNil: [
+			styles add: (self fillArtifact: FamixAngularStyle new
+				inlineContent: css withParser: cssParser for: aComponent) ] ].
+	(self readDecoratorArrayArgument: 'styleUrls' in: ast)
+		do: [ :p | p ifNotNil: [
+			styles add: (self fillArtifact: FamixAngularStyle new
+				path: p withParser: cssParser for: aComponent) ] ].
+	^ styles
 
+	
+]
+
+{ #category : 'as yet unclassified' }
+FamixAngularComponentImporter >> extractTemplateFor: aComponent in: ast [
+
+	| inline path |
+	inline := self readDecoratorArgument: 'template' in: ast.
+	inline ifNotNil: [
+		^ self fillArtifact: FamixAngularTemplate new
+			inlineContent: inline withParser: FASTHTMLParser new for: aComponent ].
+	path := self readDecoratorArgument: 'templateUrl' in: ast.
+	path ifNil: [ ^ nil ].
+	^ self fillArtifact: FamixAngularTemplate new
+		path: path withParser: FASTHTMLParser new for: aComponent
+]
+
+{ #category : 'as yet unclassified' }
+FamixAngularComponentImporter >> fillArtifact: anArtifact inlineContent: aString withParser: aParser for: aComponent [
+	anArtifact
+		isInline: true;
+		content: aString;
+		ast: (aParser parse: aString);
+		component: aComponent.
+	^ anArtifact
+]
+
+{ #category : 'as yet unclassified' }
+FamixAngularComponentImporter >> fillArtifact: anArtifact path: aPath withParser: aParser for: aComponent [
+	| file content |
+	file := self resolvePath: aPath
+		         fromSourceAnchor: aComponent implementingClass sourceAnchor.
+	content := file exists ifTrue: [ file contents ] ifFalse: [ nil ].
+	anArtifact
+		isInline: false;
+		path: aPath;
+		file: file;
+		content: content;
+		ast: (content ifNotNil: [ :c | aParser parse: c ]);
+		component: aComponent.
+	^ anArtifact
+]
+
+{ #category : 'as yet unclassified' }
+FamixAngularComponentImporter >> fillMetadata: aComponent [
 	aComponent ast ifNotNil: [ :ast |
-		aComponent selector:
-			(self readDecoratorArgument: 'selector' in: ast). 
-		aComponent template: (self
-				 resolveTemplateForArgument: 'templateUrl'
-				 in: ast
-				 for: aComponent) ]
+		aComponent selector: (self readDecoratorArgument: 'selector' in: ast).
+		self extractTemplateFor: aComponent in: ast.
+		self extractStylesFor: aComponent in: ast ]
 ]
 
 { #category : 'as yet unclassified' }
@@ -38,28 +94,4 @@ FamixAngularComponentImporter >> resolvePath: extractedPath fromSourceAnchor: aS
 	tsFile := aSourceAnchor fileReference .
 	directory := tsFile parent.
 	^ (directory / extractedPath) asFileReference
-]
-
-{ #category : 'as yet unclassified' }
-FamixAngularComponentImporter >> resolveTemplateForArgument: anArgument in: ast for: aComponent [
-
-	| pathStr htmlTemplateFile angularTemplate |
-	
-	" !!!! handle the case when inline !!!! "
-		
-	pathStr := self readDecoratorArgument: 'templateUrl' in: ast.
-	htmlTemplateFile := self
-		                    resolvePath: pathStr
-		                    fromSourceAnchor:
-		                    aComponent implementingClass sourceAnchor.
-
-	angularTemplate := FamixAngularTemplate new.
-	"Add ast and fill it with parsed htmlTemplateFile"
-	angularTemplate templateUrl: pathStr.
-	angularTemplate templateFile: htmlTemplateFile.
-	angularTemplate ast: (FASTHTMLParser new parse: htmlTemplateFile contents  ).
-	angularTemplate component: aComponent.
-	angularTemplate isInline: false.
-
-	^ angularTemplate
 ]

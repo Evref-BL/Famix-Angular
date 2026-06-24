@@ -55,6 +55,17 @@ FamixAngularTypesImporter >> readDecoratorArgument: aKey in: anAst [
 ]
 
 { #category : 'as yet unclassified' }
+FamixAngularTypesImporter >> readDecoratorArrayArgument: aKey in: anAst [
+	^ (anAst allWithType: FASTTypeScriptPair)
+		  detect: [ :pair |
+			  pair children anySatisfy: [ :child |
+				  child class = FASTTypeScriptPropertyIdentifier and: [
+					  child sourceCode = aKey ] ] ]
+		  ifFound: [ :pair | self stringValuesOf: pair ]
+		  ifNone: [ #(  ) ]
+]
+
+{ #category : 'as yet unclassified' }
 FamixAngularTypesImporter >> stringValueOf: aPair [
 	| valueString |
 	valueString := aPair children
@@ -67,4 +78,14 @@ FamixAngularTypesImporter >> stringValueOf: aPair [
 				detect: [ :e | e class = FASTTypeScriptStringFragment ]
 				ifNone: [ nil ])
 				ifNotNil: [ :frag | frag sourceCode ] ]
+]
+
+{ #category : 'as yet unclassified' }
+FamixAngularTypesImporter >> stringValuesOf: aPair [
+	^ (aPair allChildren select: [ :e | e class = FASTTypeScriptString ])
+		collect: [ :str |
+			(str allChildren
+				detect: [ :e | e class = FASTTypeScriptStringFragment ]
+				ifNone: [ nil ])
+			ifNotNil: [ :frag | frag sourceCode ] ]
 ]

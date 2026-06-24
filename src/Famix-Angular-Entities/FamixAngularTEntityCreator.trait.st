@@ -21,6 +21,13 @@ FamixAngularTEntityCreator classSide >> annotation [
 ]
 
 { #category : 'entity creation' }
+FamixAngularTEntityCreator >> newArtifact [
+
+	<generated>
+	^ self add: FamixAngularArtifact new
+]
+
+{ #category : 'entity creation' }
 FamixAngularTEntityCreator >> newComment [
 
 	<generated>
@@ -81,6 +88,13 @@ FamixAngularTEntityCreator >> newSourceTextAnchor [
 
 	<generated>
 	^ self add: FamixAngularSourceTextAnchor new
+]
+
+{ #category : 'entity creation' }
+FamixAngularTEntityCreator >> newStyle [
+
+	<generated>
+	^ self add: FamixAngularStyle new
 ]
 
 { #category : 'entity creation' }

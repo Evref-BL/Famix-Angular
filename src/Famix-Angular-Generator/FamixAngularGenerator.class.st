@@ -13,7 +13,9 @@ Class {
 		'pipe',
 		'service',
 		'template',
-		'tDeclarable'
+		'tDeclarable',
+		'artifact',
+		'style'
 	],
 	#category : 'Famix-Angular-Generator',
 	#package : 'Famix-Angular-Generator'
@@ -51,49 +53,64 @@ FamixAngularGenerator >> defineClasses [
 	directive := builder newClassNamed: #Directive.
 	pipe := builder newClassNamed: #Pipe.
 	service := builder newClassNamed: #Service.
-	 
+ 
 	template := builder newClassNamed: #Template. "Template represents a component's view: the HTML that Angular renders for that component. "
-	route := builder newClassNamed: #Route "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
+	artifact := builder newClassNamed: #Artifact. "this is on top of template and style for css files; because both are files :)"
+	style := builder newClassNamed: #Style. 
+	
+	route := builder newClassNamed: #Route. "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
+	
+	
 ]
 
 { #category : 'definition' }
 FamixAngularGenerator >> defineHierarchy [
 
-    super defineHierarchy.
-    
-    angularEntity --|> #TNamedEntity.
-    angularType   --|> angularEntity.
-    ngModule --|> angularType.
-    component --|> angularType.
-    directive --|> angularType.
-    pipe --|> angularType.
-    service --|> angularType.
-    template --|> angularEntity.
-    route --|> angularEntity.
+	super defineHierarchy.
 
-    "declarables"
-"not sure if I use declarable like this."
-    component --|> tDeclarable.
-    directive --|> tDeclarable.
-    pipe      --|> tDeclarable.
+	angularEntity --|> #TNamedEntity.
+	angularType --|> angularEntity.
+	ngModule --|> angularType.
+	component --|> angularType.
+	directive --|> angularType.
+	pipe --|> angularType.
+	service --|> angularType.
+	
+	artifact  --|> angularEntity.
+	template  --|> artifact. "this is for html"
+	style     --|> artifact. "this is for css"
+	
+	route --|> angularEntity.
 
+	"declarables"
+	"not sure if I use declarable like this."
+	component --|> tDeclarable.
+	directive --|> tDeclarable.
+	pipe --|> tDeclarable
 ]
 
 { #category : 'definition' }
 FamixAngularGenerator >> defineProperties [
 
-	super defineProperties. 
-	
+	super defineProperties.
+
 	component property: #selector type: #String.
 	pipe property: #pipeName type: #String.
 	template property: #isInline type: #Boolean.
 	template property: #templateUrl type: #String.
 	route property: #path type: #String.
-
-	"aless: for the moment I don't see why we need this for something else other than angulartype"
+	
+	"shared artifact properties"
+	artifact property: #isInline type: #Boolean.
+	artifact property: #path type: #String. "templateUrl / a styleUrl / later a json path"
+	artifact property: #content type: #String. "inline source, or file contents"
+	artifact property: #file type: #Object.  "FileReference, transient"
+	artifact property: #ast type: #Object.
+ 
 	angularType property: #ast type: #Object.
-	template property: #ast type: #Object.
-	template property: #templateFile type: #Object.
+	
+	"template property: #ast type: #Object."
+	"template property: #templateFile type: #Object."
 ]
 
 { #category : 'definition' }
@@ -123,6 +140,8 @@ FamixAngularGenerator >> defineRelations [
 
 	"a component owns one template"
 	(component property: #template) <>- (template property: #component).
+	"a component owns many stylesheets"
+	(component property: #styles) <>-* (style property: #component).
 
 	"dependency injection via constructor"
 	(angularType property: #injectedServices)
@@ -133,8 +152,7 @@ FamixAngularGenerator >> defineRelations [
 	*-* (component property: #usingTemplates).
 
 	"routing"
-	(route property: #targetComponent) -* (component property: #routes).
-	
+	(route property: #targetComponent) -* (component property: #routes)
 ]
 
 { #category : 'definition' }

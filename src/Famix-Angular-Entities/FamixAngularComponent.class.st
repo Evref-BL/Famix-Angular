@@ -5,6 +5,7 @@
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
 |---|
+| `styles` | `FamixAngularComponent` | `component` | `FamixAngularStyle` | |
 | `template` | `FamixAngularComponent` | `component` | `FamixAngularTemplate` | |
 
 ### Other
@@ -31,6 +32,7 @@ Class {
 	#instVars : [
 		'#selector => FMProperty',
 		'#template => FMOne type: #FamixAngularTemplate opposite: #component',
+		'#styles => FMMany type: #FamixAngularStyle opposite: #component',
 		'#usingTemplates => FMMany type: #FamixAngularTemplate opposite: #usedComponents',
 		'#routes => FMOne type: #FamixAngularRoute opposite: #targetComponent'
 	],
@@ -46,6 +48,12 @@ FamixAngularComponent class >> annotation [
 	<package: #FamixAngular>
 	<generated>
 	^ self
+]
+
+{ #category : 'adding' }
+FamixAngularComponent >> addStyle: anObject [
+	<generated>
+	^ self styles add: anObject
 ]
 
 { #category : 'adding' }
@@ -81,6 +89,29 @@ FamixAngularComponent >> selector [
 FamixAngularComponent >> selector: anObject [
 	<generated>
 	selector := anObject
+]
+
+{ #category : 'accessing' }
+FamixAngularComponent >> styles [
+	"Relation named: #styles type: #FamixAngularStyle opposite: #component"
+
+	<generated>
+	<derived>
+	^ styles
+]
+
+{ #category : 'accessing' }
+FamixAngularComponent >> styles: anObject [
+
+	<generated>
+	styles value: anObject
+]
+
+{ #category : 'navigation' }
+FamixAngularComponent >> stylesGroup [
+	<generated>
+	<navigation: 'Styles'>
+	^ MooseSpecializedGroup withAll: self styles asSet
 ]
 
 { #category : 'accessing' }
