@@ -21,13 +21,19 @@ BaselineOfFamixAngular >> baseline: spec [
 { #category : 'baselines' }
 BaselineOfFamixAngular >> defineDependencies: spec [
 
-	spec 
+	spec
 		baseline: 'FamixTypeScript' with: [
 			spec
 				loads: #( 'default' );
 				repository: 'github://fuhrmanator/FamixTypeScript:master/src' ];
-		baseline: 'FASTTypeScript' with: [
-			spec repository: 'github://moosetechnology/FASTTypescript:main' ]
+		
+		baseline: 'FASTTypeScript'
+		with: [
+		spec repository: 'github://moosetechnology/FASTTypescript:main' ];
+		
+		baseline: 'FASTHTML'
+		with: [
+		spec repository: 'github://Evref-BL/FAST-HTML:main' ]
 ]
 
 { #category : 'baselines' }

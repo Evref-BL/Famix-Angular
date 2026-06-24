@@ -41,9 +41,9 @@ FamixAngularTypesImporter >> fillMetadata: angularType [
 
 { #category : 'as yet unclassified' }
 FamixAngularTypesImporter >> readDecoratorArgument: aKey in: anAst [
+	"I hate this and prefer MoTion; but ok for now"
 
-"I hate this and prefer MoTion; but ok for now"
-"we are using it to get key and value from decorator in Angular componenents for example"
+	"we are using it to get key and value from decorator in Angular componenents for example"
 
 	^ (anAst allWithType: FASTTypeScriptPair)
 		  detect: [ :pair |

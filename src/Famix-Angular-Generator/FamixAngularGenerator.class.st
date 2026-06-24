@@ -82,51 +82,59 @@ FamixAngularGenerator >> defineHierarchy [
 { #category : 'definition' }
 FamixAngularGenerator >> defineProperties [
 
-	super defineProperties.
-	"aless to be changed? already thios approach (type) is handled in famix typescript "
+	super defineProperties. 
+	
 	component property: #selector type: #String.
 	pipe property: #pipeName type: #String.
 	template property: #isInline type: #Boolean.
 	template property: #templateUrl type: #String.
 	route property: #path type: #String.
-	
-"aless: for the moment I don't see why we need this for something else other than angulartype"
-	angularType property: #ast type: #Object
 
-
+	"aless: for the moment I don't see why we need this for something else other than angulartype"
+	angularType property: #ast type: #Object.
+	template property: #ast type: #Object.
+	template property: #templateFile type: #Object.
 ]
 
 { #category : 'definition' }
 FamixAngularGenerator >> defineRelations [
+
 	| tsClass |
 	"aless not sure about this"
-    super defineRelations.
-    
-    tsClass := self remoteEntity: #Class withPrefix: #FamixTypeScript.
+	super defineRelations.
 
-    "each Angular role is backed by exactly one TS class (1-1 association)"
-    (angularType property: #implementingClass) - (tsClass property: #angularType).
+	tsClass := self remoteEntity: #Class withPrefix: #FamixTypeScript.
 
-    "module declares many declarables; a declarable is declared by 0..1 module"
-    (ngModule property: #declarations) -* (tDeclarable property: #declaringModule).
+	"each Angular role is backed by exactly one TS class (1-1 association)"
+	(angularType property: #implementingClass)
+	- (tsClass property: #angularType).
 
-    "module import graph"
-    (ngModule property: #importedModules) *-* (ngModule property: #importingModules).
+	"module declares many declarables; a declarable is declared by 0..1 module"
+	(ngModule property: #declarations)
+	-* (tDeclarable property: #declaringModule).
 
-    "providers"
-    (ngModule property: #providedServices) *-* (service property: #providingModules).
+	"module import graph"
+	(ngModule property: #importedModules)
+	*-* (ngModule property: #importingModules).
 
-    "a component owns one template"
-    (component property: #template) <>- (template property: #component).
+	"providers"
+	(ngModule property: #providedServices)
+	*-* (service property: #providingModules).
 
-    "dependency injection via constructor"
-    (angularType property: #injectedServices) *-* (service property: #injectingClients).
+	"a component owns one template"
+	(component property: #template) <>- (template property: #component).
 
-    "template references components by selector"
-    (template property: #usedComponents) *-* (component property: #usingTemplates).
+	"dependency injection via constructor"
+	(angularType property: #injectedServices)
+	*-* (service property: #injectingClients).
 
-    "routing"
-    (route property: #targetComponent) -* (component property: #routes).
+	"template references components by selector"
+	(template property: #usedComponents)
+	*-* (component property: #usingTemplates).
+
+	"routing"
+	(route property: #targetComponent) -* (component property: #routes).
+	
 ]
 
 { #category : 'definition' }

@@ -18,7 +18,9 @@
 
 | Name | Type | Default value | Comment |
 |---|
+| `ast` | `Object` | nil | |
 | `isInline` | `Boolean` | nil | |
+| `templateFile` | `Object` | nil | |
 | `templateUrl` | `String` | nil | |
 
 "
@@ -28,6 +30,8 @@ Class {
 	#instVars : [
 		'#isInline => FMProperty',
 		'#templateUrl => FMProperty',
+		'#ast => FMProperty',
+		'#templateFile => FMProperty',
 		'#component => FMOne type: #FamixAngularComponent opposite: #template',
 		'#usedComponents => FMMany type: #FamixAngularComponent opposite: #usingTemplates'
 	],
@@ -49,6 +53,20 @@ FamixAngularTemplate class >> annotation [
 FamixAngularTemplate >> addUsedComponent: anObject [
 	<generated>
 	^ self usedComponents add: anObject
+]
+
+{ #category : 'accessing' }
+FamixAngularTemplate >> ast [
+
+	<FMProperty: #ast type: #Object>
+	<generated>
+	^ ast
+]
+
+{ #category : 'accessing' }
+FamixAngularTemplate >> ast: anObject [
+	<generated>
+	ast := anObject
 ]
 
 { #category : 'accessing' }
@@ -87,6 +105,20 @@ FamixAngularTemplate >> isInline [
 FamixAngularTemplate >> isInline: anObject [
 	<generated>
 	isInline := anObject
+]
+
+{ #category : 'accessing' }
+FamixAngularTemplate >> templateFile [
+
+	<FMProperty: #templateFile type: #Object>
+	<generated>
+	^ templateFile
+]
+
+{ #category : 'accessing' }
+FamixAngularTemplate >> templateFile: anObject [
+	<generated>
+	templateFile := anObject
 ]
 
 { #category : 'accessing' }
