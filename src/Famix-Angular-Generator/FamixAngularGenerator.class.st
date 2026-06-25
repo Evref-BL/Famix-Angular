@@ -99,16 +99,16 @@ FamixAngularGenerator >> defineProperties [
 	template property: #isInline type: #Boolean.
 	template property: #templateUrl type: #String.
 	route property: #path type: #String.
-	
+
 	"shared artifact properties"
 	artifact property: #isInline type: #Boolean.
 	artifact property: #path type: #String. "templateUrl / a styleUrl / later a json path"
 	artifact property: #content type: #String. "inline source, or file contents"
-	artifact property: #file type: #Object.  "FileReference, transient"
+	artifact property: #file type: #Object. "FileReference, transient"
 	artifact property: #ast type: #Object.
- 
-	angularType property: #ast type: #Object.
-	
+
+	angularType property: #ast type: #Object
+
 	"template property: #ast type: #Object."
 	"template property: #templateFile type: #Object."
 ]

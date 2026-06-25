@@ -82,10 +82,18 @@ FamixAngularTypesImporter >> stringValueOf: aPair [
 
 { #category : 'as yet unclassified' }
 FamixAngularTypesImporter >> stringValuesOf: aPair [
-	^ (aPair allChildren select: [ :e | e class = FASTTypeScriptString ])
-		collect: [ :str |
-			(str allChildren
-				detect: [ :e | e class = FASTTypeScriptStringFragment ]
-				ifNone: [ nil ])
-			ifNotNil: [ :frag | frag sourceCode ] ]
+
+| identifiers |
+
+identifiers := aPair allChildren select: [ :e |
+	e class = FASTTypeScriptIdentifier ].
+^ identifiers
+	ifNotEmpty: [ identifiers collect: [ :id | id sourceCode ] ]
+	ifEmpty: [
+		(aPair allChildren select: [ :e | e class = FASTTypeScriptString ])
+			collect: [ :str |
+				(str allChildren
+					detect: [ :e | e class = FASTTypeScriptStringFragment ]
+					ifNone: [ nil ])
+				ifNotNil: [ :frag | frag sourceCode ] ] ]
 ]
