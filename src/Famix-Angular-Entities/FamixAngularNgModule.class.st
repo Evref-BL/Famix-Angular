@@ -6,8 +6,6 @@
 | Relation | Origin | Opposite | Type | Comment |
 |---|
 | `declarations` | `FamixAngularNgModule` | `declaringModule` | `FamixAngularTDeclarable` | |
-| `importedModules` | `FamixAngularNgModule` | `importingModules` | `FamixAngularNgModule` | |
-| `importingModules` | `FamixAngularNgModule` | `importedModules` | `FamixAngularNgModule` | |
 | `providedServices` | `FamixAngularNgModule` | `providingModules` | `FamixAngularService` | |
 
 
@@ -18,8 +16,6 @@ Class {
 	#superclass : 'FamixAngularType',
 	#instVars : [
 		'#declarations => FMMany type: #FamixAngularTDeclarable opposite: #declaringModule',
-		'#importedModules => FMMany type: #FamixAngularNgModule opposite: #importingModules',
-		'#importingModules => FMMany type: #FamixAngularNgModule opposite: #importedModules',
 		'#providedServices => FMMany type: #FamixAngularService opposite: #providingModules'
 	],
 	#category : 'Famix-Angular-Entities-Entities',
@@ -43,18 +39,6 @@ FamixAngularNgModule >> addDeclaration: anObject [
 ]
 
 { #category : 'adding' }
-FamixAngularNgModule >> addImportedModule: anObject [
-	<generated>
-	^ self importedModules add: anObject
-]
-
-{ #category : 'adding' }
-FamixAngularNgModule >> addImportingModule: anObject [
-	<generated>
-	^ self importingModules add: anObject
-]
-
-{ #category : 'adding' }
 FamixAngularNgModule >> addProvidedService: anObject [
 	<generated>
 	^ self providedServices add: anObject
@@ -74,37 +58,6 @@ FamixAngularNgModule >> declarations: anObject [
 
 	<generated>
 	declarations value: anObject
-]
-
-{ #category : 'accessing' }
-FamixAngularNgModule >> importedModules [
-	"Relation named: #importedModules type: #FamixAngularNgModule opposite: #importingModules"
-
-	<generated>
-	<derived>
-	^ importedModules
-]
-
-{ #category : 'accessing' }
-FamixAngularNgModule >> importedModules: anObject [
-
-	<generated>
-	importedModules value: anObject
-]
-
-{ #category : 'accessing' }
-FamixAngularNgModule >> importingModules [
-	"Relation named: #importingModules type: #FamixAngularNgModule opposite: #importedModules"
-
-	<generated>
-	^ importingModules
-]
-
-{ #category : 'accessing' }
-FamixAngularNgModule >> importingModules: anObject [
-
-	<generated>
-	importingModules value: anObject
 ]
 
 { #category : 'accessing' }
