@@ -75,15 +75,14 @@ FamixAngularGenerator >> defineHierarchy [
 	directive --|> angularType.
 	pipe --|> angularType.
 	service --|> angularType.
-	
-	artifact  --|> angularEntity.
-	template  --|> artifact. "this is for html"
-	style     --|> artifact. "this is for css"
-	
+
+	artifact --|> angularEntity.
+	template --|> artifact. "this is for html"
+	style --|> artifact. "this is for css"
+
 	route --|> angularEntity.
 
 	"declarables"
-	"not sure if I use declarable like this."
 	component --|> tDeclarable.
 	directive --|> tDeclarable.
 	pipe --|> tDeclarable

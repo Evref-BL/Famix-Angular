@@ -23,14 +23,12 @@ FamixAngularNgModuleImporter >> decoratorName [
 FamixAngularNgModuleImporter >> extractDeclarationsFor: aModule in: ast [
 
 	| declarations |
-	
-	declarations := self readDecoratorArrayArgument: 'declarations' in: ast.
-	(angularModel  allWithType: FamixAngularComponent) do: [ :each |
-		(declarations includes: each name)
-		ifTrue: [aModule addDeclaration: each ] 
-	]
-	
-	
+	declarations := self
+		                readDecoratorArrayArgument: 'declarations'
+		                in: ast.
+	(angularModel allUsing: FamixAngularTDeclarable) do: [ :each |
+		(declarations includes: each name) ifTrue: [
+			aModule addDeclaration: each ] ]. 
 ]
 
 { #category : 'as yet unclassified' }
