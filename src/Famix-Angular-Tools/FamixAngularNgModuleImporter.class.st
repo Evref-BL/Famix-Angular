@@ -33,9 +33,22 @@ FamixAngularNgModuleImporter >> extractDeclarationsFor: aModule in: ast [
 	
 ]
 
-{ #category : 'instance creation' }
-FamixAngularNgModuleImporter >> fillMetadata: aComponent [
+{ #category : 'as yet unclassified' }
+FamixAngularNgModuleImporter >> extractProvidedServicesFor: aModule in: ast [
 
-	aComponent ast ifNotNil: [ :ast |
-		self extractDeclarationsFor: aComponent in: ast  ]
+	| providers |
+	providers := self
+		                readDecoratorArrayArgument: 'providers'
+		                in: ast.
+	(angularModel allWithType: FamixAngularService) do: [ :each |
+		(providers includes: each name) ifTrue: [
+			aModule addProvidedService: each ] ]
+]
+
+{ #category : 'instance creation' }
+FamixAngularNgModuleImporter >> fillMetadata: aModule [
+
+	aModule ast ifNotNil: [ :ast |
+		self extractDeclarationsFor: aModule in: ast.
+		self extractProvidedServicesFor: aModule in: ast  ]
 ]

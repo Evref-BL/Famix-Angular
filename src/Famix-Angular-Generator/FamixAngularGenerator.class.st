@@ -131,8 +131,8 @@ FamixAngularGenerator >> defineRelations [
 	-* (tDeclarable property: #declaringModule).
 
 	"module import graph"
-	(ngModule property: #importedModules)
-	*-* (ngModule property: #importingModules).
+	"(ngModule property: #importedModules)
+	*-* (ngModule property: #importingModules)." "For the moment this is external and i will stop it cz i dunno how to handle it ... yet :) "
 
 	"providers"
 	(ngModule property: #providedServices)
