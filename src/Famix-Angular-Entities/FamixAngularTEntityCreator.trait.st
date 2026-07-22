@@ -49,6 +49,13 @@ FamixAngularTEntityCreator >> newDirective [
 ]
 
 { #category : 'entity creation' }
+FamixAngularTEntityCreator >> newHTMLTemplate [
+
+	<generated>
+	^ self add: FamixAngularHTMLTemplate new
+]
+
+{ #category : 'entity creation' }
 FamixAngularTEntityCreator >> newNgModule [
 
 	<generated>
@@ -95,13 +102,6 @@ FamixAngularTEntityCreator >> newStyle [
 
 	<generated>
 	^ self add: FamixAngularStyle new
-]
-
-{ #category : 'entity creation' }
-FamixAngularTEntityCreator >> newTemplate [
-
-	<generated>
-	^ self add: FamixAngularTemplate new
 ]
 
 { #category : 'entity creation' }

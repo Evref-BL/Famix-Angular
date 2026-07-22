@@ -5,12 +5,12 @@
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
 |---|
-| `component` | `FamixAngularTemplate` | `template` | `FamixAngularComponent` | |
+| `component` | `FamixAngularHTMLTemplate` | `htmlTemplate` | `FamixAngularComponent` | |
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
 |---|
-| `usedComponents` | `FamixAngularTemplate` | `usingTemplates` | `FamixAngularComponent` | |
+| `usedComponents` | `FamixAngularHTMLTemplate` | `usingTemplates` | `FamixAngularComponent` | |
 
 
 ## Properties
@@ -23,10 +23,10 @@
 
 "
 Class {
-	#name : 'FamixAngularTemplate',
+	#name : 'FamixAngularHTMLTemplate',
 	#superclass : 'FamixAngularArtifact',
 	#instVars : [
-		'#component => FMOne type: #FamixAngularComponent opposite: #template',
+		'#component => FMOne type: #FamixAngularComponent opposite: #htmlTemplate',
 		'#templateUrl => FMProperty',
 		'#usedComponents => FMMany type: #FamixAngularComponent opposite: #usingTemplates'
 	],
@@ -36,23 +36,23 @@ Class {
 }
 
 { #category : 'meta' }
-FamixAngularTemplate class >> annotation [
+FamixAngularHTMLTemplate class >> annotation [
 
-	<FMClass: #Template super: #FamixAngularArtifact>
+	<FMClass: #HTMLTemplate super: #FamixAngularArtifact>
 	<package: #FamixAngular>
 	<generated>
 	^ self
 ]
 
 { #category : 'adding' }
-FamixAngularTemplate >> addUsedComponent: anObject [
+FamixAngularHTMLTemplate >> addUsedComponent: anObject [
 	<generated>
 	^ self usedComponents add: anObject
 ]
 
 { #category : 'accessing' }
-FamixAngularTemplate >> component [
-	"Relation named: #component type: #FamixAngularComponent opposite: #template"
+FamixAngularHTMLTemplate >> component [
+	"Relation named: #component type: #FamixAngularComponent opposite: #htmlTemplate"
 
 	<generated>
 	<container>
@@ -61,21 +61,21 @@ FamixAngularTemplate >> component [
 ]
 
 { #category : 'accessing' }
-FamixAngularTemplate >> component: anObject [
+FamixAngularHTMLTemplate >> component: anObject [
 
 	<generated>
 	component := anObject
 ]
 
 { #category : 'navigation' }
-FamixAngularTemplate >> componentGroup [
+FamixAngularHTMLTemplate >> componentGroup [
 	<generated>
 	<navigation: 'Component'>
 	^ MooseSpecializedGroup with: self component
 ]
 
 { #category : 'accessing' }
-FamixAngularTemplate >> isInline [
+FamixAngularHTMLTemplate >> isInline [
 
 	<FMProperty: #isInline type: #Boolean>
 	<generated>
@@ -83,13 +83,13 @@ FamixAngularTemplate >> isInline [
 ]
 
 { #category : 'accessing' }
-FamixAngularTemplate >> isInline: anObject [
+FamixAngularHTMLTemplate >> isInline: anObject [
 	<generated>
 	isInline := anObject
 ]
 
 { #category : 'accessing' }
-FamixAngularTemplate >> templateUrl [
+FamixAngularHTMLTemplate >> templateUrl [
 
 	<FMProperty: #templateUrl type: #String>
 	<generated>
@@ -97,13 +97,13 @@ FamixAngularTemplate >> templateUrl [
 ]
 
 { #category : 'accessing' }
-FamixAngularTemplate >> templateUrl: anObject [
+FamixAngularHTMLTemplate >> templateUrl: anObject [
 	<generated>
 	templateUrl := anObject
 ]
 
 { #category : 'accessing' }
-FamixAngularTemplate >> usedComponents [
+FamixAngularHTMLTemplate >> usedComponents [
 	"Relation named: #usedComponents type: #FamixAngularComponent opposite: #usingTemplates"
 
 	<generated>
@@ -112,7 +112,7 @@ FamixAngularTemplate >> usedComponents [
 ]
 
 { #category : 'accessing' }
-FamixAngularTemplate >> usedComponents: anObject [
+FamixAngularHTMLTemplate >> usedComponents: anObject [
 
 	<generated>
 	usedComponents value: anObject

@@ -5,15 +5,15 @@
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
 |---|
+| `htmlTemplate` | `FamixAngularComponent` | `component` | `FamixAngularHTMLTemplate` | |
 | `styles` | `FamixAngularComponent` | `component` | `FamixAngularStyle` | |
-| `template` | `FamixAngularComponent` | `component` | `FamixAngularTemplate` | |
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
 |---|
 | `declaringModule` | `FamixAngularTDeclarable` | `declarations` | `FamixAngularNgModule` | |
 | `routes` | `FamixAngularComponent` | `targetComponent` | `FamixAngularRoute` | |
-| `usingTemplates` | `FamixAngularComponent` | `usedComponents` | `FamixAngularTemplate` | |
+| `usingTemplates` | `FamixAngularComponent` | `usedComponents` | `FamixAngularHTMLTemplate` | |
 
 
 ## Properties
@@ -31,9 +31,9 @@ Class {
 	#classTraits : 'FamixAngularTDeclarable classTrait',
 	#instVars : [
 		'#selector => FMProperty',
-		'#template => FMOne type: #FamixAngularTemplate opposite: #component',
+		'#htmlTemplate => FMOne type: #FamixAngularHTMLTemplate opposite: #component',
 		'#styles => FMMany type: #FamixAngularStyle opposite: #component',
-		'#usingTemplates => FMMany type: #FamixAngularTemplate opposite: #usedComponents',
+		'#usingTemplates => FMMany type: #FamixAngularHTMLTemplate opposite: #usedComponents',
 		'#routes => FMOne type: #FamixAngularRoute opposite: #targetComponent'
 	],
 	#category : 'Famix-Angular-Entities-Entities',
@@ -60,6 +60,28 @@ FamixAngularComponent >> addStyle: anObject [
 FamixAngularComponent >> addUsingTemplate: anObject [
 	<generated>
 	^ self usingTemplates add: anObject
+]
+
+{ #category : 'accessing' }
+FamixAngularComponent >> htmlTemplate [
+	"Relation named: #htmlTemplate type: #FamixAngularHTMLTemplate opposite: #component"
+
+	<generated>
+	^ htmlTemplate
+]
+
+{ #category : 'accessing' }
+FamixAngularComponent >> htmlTemplate: anObject [
+
+	<generated>
+	htmlTemplate := anObject
+]
+
+{ #category : 'navigation' }
+FamixAngularComponent >> htmlTemplateGroup [
+	<generated>
+	<navigation: 'HtmlTemplate'>
+	^ MooseSpecializedGroup with: self htmlTemplate
 ]
 
 { #category : 'accessing' }
@@ -115,30 +137,8 @@ FamixAngularComponent >> stylesGroup [
 ]
 
 { #category : 'accessing' }
-FamixAngularComponent >> template [
-	"Relation named: #template type: #FamixAngularTemplate opposite: #component"
-
-	<generated>
-	^ template
-]
-
-{ #category : 'accessing' }
-FamixAngularComponent >> template: anObject [
-
-	<generated>
-	template := anObject
-]
-
-{ #category : 'navigation' }
-FamixAngularComponent >> templateGroup [
-	<generated>
-	<navigation: 'Template'>
-	^ MooseSpecializedGroup with: self template
-]
-
-{ #category : 'accessing' }
 FamixAngularComponent >> usingTemplates [
-	"Relation named: #usingTemplates type: #FamixAngularTemplate opposite: #usedComponents"
+	"Relation named: #usingTemplates type: #FamixAngularHTMLTemplate opposite: #usedComponents"
 
 	<generated>
 	^ usingTemplates

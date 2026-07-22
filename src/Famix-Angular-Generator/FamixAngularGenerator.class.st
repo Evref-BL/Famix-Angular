@@ -12,10 +12,10 @@ Class {
 		'directive',
 		'pipe',
 		'service',
-		'template',
 		'tDeclarable',
 		'artifact',
-		'style'
+		'style',
+		'htmlTemplate'
 	],
 	#category : 'Famix-Angular-Generator',
 	#package : 'Famix-Angular-Generator'
@@ -53,14 +53,12 @@ FamixAngularGenerator >> defineClasses [
 	directive := builder newClassNamed: #Directive.
 	pipe := builder newClassNamed: #Pipe.
 	service := builder newClassNamed: #Service.
- 
-	template := builder newClassNamed: #Template. "Template represents a component's view: the HTML that Angular renders for that component. "
+
+	htmlTemplate := builder newClassNamed: #HTMLTemplate. "Template represents a component's view: the HTML that Angular renders for that component. "
 	artifact := builder newClassNamed: #Artifact. "this is on top of template and style for css files; because both are files :)"
-	style := builder newClassNamed: #Style. 
-	
-	route := builder newClassNamed: #Route. "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
-	
-	
+	style := builder newClassNamed: #Style.
+
+	route := builder newClassNamed: #Route "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
 ]
 
 { #category : 'definition' }
@@ -77,7 +75,7 @@ FamixAngularGenerator >> defineHierarchy [
 	service --|> angularType.
 
 	artifact --|> angularEntity.
-	template --|> artifact. "this is for html"
+	htmlTemplate --|> artifact. "this is for html"
 	style --|> artifact. "this is for css"
 
 	route --|> angularEntity.
@@ -95,8 +93,8 @@ FamixAngularGenerator >> defineProperties [
 
 	component property: #selector type: #String.
 	pipe property: #pipeName type: #String.
-	template property: #isInline type: #Boolean.
-	template property: #templateUrl type: #String.
+	htmlTemplate property: #isInline type: #Boolean.
+	htmlTemplate property: #templateUrl type: #String.
 	route property: #path type: #String.
 
 	"shared artifact properties"
@@ -138,7 +136,8 @@ FamixAngularGenerator >> defineRelations [
 	*-* (service property: #providingModules).
 
 	"a component owns one template"
-	(component property: #template) <>- (template property: #component).
+	(component property: #htmlTemplate)
+	<>- (htmlTemplate property: #component).
 	"a component owns many stylesheets"
 	(component property: #styles) <>-* (style property: #component).
 
@@ -147,7 +146,7 @@ FamixAngularGenerator >> defineRelations [
 	*-* (service property: #injectingClients).
 
 	"template references components by selector"
-	(template property: #usedComponents)
+	(htmlTemplate property: #usedComponents)
 	*-* (component property: #usingTemplates).
 
 	"routing"
