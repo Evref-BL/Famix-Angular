@@ -42,21 +42,7 @@ FamixAngularEntity class >> metamodel [
 ]
 
 { #category : 'testing' }
-FamixAngularEntity >> isComment [
-
-	<generated>
-	^ false
-]
-
-{ #category : 'testing' }
 FamixAngularEntity >> isNamedEntity [
-
-	<generated>
-	^ false
-]
-
-{ #category : 'testing' }
-FamixAngularEntity >> isQueryable [
 
 	<generated>
 	^ false

@@ -15,7 +15,12 @@ Class {
 		'tDeclarable',
 		'artifact',
 		'style',
-		'htmlTemplate'
+		'htmlTemplate',
+		'famixTNamedEntity',
+		'famixTSourceAnchor',
+		'famixTSourceLanguage',
+		'famixTSourceEntity',
+		'famixTHasImmediateSource'
 	],
 	#category : 'Famix-Angular-Generator',
 	#package : 'Famix-Angular-Generator'
@@ -38,7 +43,11 @@ FamixAngularGenerator class >> prefix [
 
 { #category : 'accessing' }
 FamixAngularGenerator class >> submetamodels [
-	^ { FamixTypeScriptGenerator }
+
+	^ {
+		  FamixTypeScriptGenerator.
+		  FASTHTMLMetamodelGenerator.
+		FamixGenerator }
 ]
 
 { #category : 'definition' }
@@ -63,10 +72,17 @@ FamixAngularGenerator >> defineClasses [
 
 { #category : 'definition' }
 FamixAngularGenerator >> defineHierarchy [
+	"super defineHierarchy."
 
-	super defineHierarchy.
+	sourceAnchor --|> famixTSourceAnchor.
+	sourceLanguage --|> famixTSourceLanguage.
+	sourcedEntity --|> famixTSourceEntity. 
+	namedEntity --|> famixTNamedEntity.
+	sourceTextAnchor --|> sourceAnchor.
+	sourceTextAnchor --|> famixTHasImmediateSource.
 
-	angularEntity --|> #TNamedEntity.
+	angularEntity --|> famixTNamedEntity.
+
 	angularType --|> angularEntity.
 	ngModule --|> angularType.
 	component --|> angularType.
@@ -155,8 +171,24 @@ FamixAngularGenerator >> defineRelations [
 
 { #category : 'definition' }
 FamixAngularGenerator >> defineTraits [
-    super defineTraits.
-    tDeclarable := builder newTraitNamed: #TDeclarable.
 
+	super defineTraits.
+ 
+	famixTNamedEntity := self
+		                     remoteTrait: #TNamedEntity
+		                     withPrefix: #Famix.
+	famixTSourceEntity := self
+		                      remoteTrait: #TSourceEntity
+		                      withPrefix: #Famix.
+	famixTSourceAnchor := self
+		                      remoteTrait: #TSourceAnchor
+		                      withPrefix: #Famix.
+	famixTHasImmediateSource := self
+		                            remoteTrait: #THasImmediateSource
+		                            withPrefix: #Famix.
+	famixTSourceLanguage := self
+		                        remoteTrait: #TSourceLanguage
+		                        withPrefix: #Famix.
 
+	tDeclarable := builder newTraitNamed: #TDeclarable
 ]

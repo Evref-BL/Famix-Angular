@@ -51,7 +51,7 @@ FamixAngularComponentImporter >> extractTemplateFor: aComponent in: ast [
 	inline := self readDecoratorArgument: 'template' in: ast.
 	inline ifNotNil: [
 		^ self
-			  fillArtifact: FamixAngularTemplate new
+			  fillArtifact: FamixAngularHTMLTemplate new
 			  name: aComponent name , '_template'
 			  inlineContent: inline
 			  withParser: FASTHTMLParser new
@@ -59,7 +59,7 @@ FamixAngularComponentImporter >> extractTemplateFor: aComponent in: ast [
 	path := self readDecoratorArgument: 'templateUrl' in: ast.
 	path ifNil: [ ^ nil ].
 	^ self
-		  fillArtifact: FamixAngularTemplate new
+		  fillArtifact: FamixAngularHTMLTemplate new
 		  name: aComponent name , '_template'
 		  path: path
 		  withParser: FASTHTMLParser new
