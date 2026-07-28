@@ -4,7 +4,6 @@
 
 | Name | Type | Default value | Comment |
 |---|
-| `ast` | `Object` | nil | |
 | `content` | `String` | nil | |
 | `file` | `Object` | nil | |
 | `isInline` | `Boolean` | nil | |
@@ -18,8 +17,7 @@ Class {
 		'#isInline => FMProperty',
 		'#path => FMProperty',
 		'#content => FMProperty',
-		'#file => FMProperty',
-		'#ast => FMProperty'
+		'#file => FMProperty'
 	],
 	#category : 'Famix-Angular-Entities-Entities',
 	#package : 'Famix-Angular-Entities',
@@ -33,20 +31,6 @@ FamixAngularArtifact class >> annotation [
 	<package: #FamixAngular>
 	<generated>
 	^ self
-]
-
-{ #category : 'accessing' }
-FamixAngularArtifact >> ast [
-
-	<FMProperty: #ast type: #Object>
-	<generated>
-	^ ast
-]
-
-{ #category : 'accessing' }
-FamixAngularArtifact >> ast: anObject [
-	<generated>
-	ast := anObject
 ]
 
 { #category : 'accessing' }

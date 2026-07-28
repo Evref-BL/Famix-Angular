@@ -7,6 +7,11 @@
 |---|
 | `component` | `FamixAngularHTMLTemplate` | `htmlTemplate` | `FamixAngularComponent` | |
 
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `htmlAstRoot` | `FamixAngularHTMLTemplate` | `angularTemplate` | `FASTHTMLDocument` | |
+
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
 |---|
@@ -72,6 +77,36 @@ FamixAngularHTMLTemplate >> componentGroup [
 	<generated>
 	<navigation: 'Component'>
 	^ MooseSpecializedGroup with: self component
+]
+
+{ #category : 'accessing' }
+FamixAngularHTMLTemplate >> htmlAstRoot [
+	"Relation named: #htmlAstRoot type: #FASTHTMLDocument opposite: #angularTemplate"
+
+	<generated>
+	<FMProperty: #htmlAstRoot type: #FASTHTMLDocument opposite: #angularTemplate>
+	^ self attributeAt: #htmlAstRoot ifAbsent: [ nil ]
+]
+
+{ #category : 'accessing' }
+FamixAngularHTMLTemplate >> htmlAstRoot: anObject [
+
+	<generated>
+	(self attributeAt: #htmlAstRoot ifAbsentPut: [nil]) == anObject ifTrue: [ ^ anObject ].
+	anObject ifNil: [ | otherSide |
+		otherSide :=  self htmlAstRoot.
+		self attributeAt: #htmlAstRoot put: anObject.
+		otherSide angularTemplate: nil ]
+	ifNotNil: [ 
+		self attributeAt: #htmlAstRoot put: anObject.
+		anObject angularTemplate: self ]
+]
+
+{ #category : 'navigation' }
+FamixAngularHTMLTemplate >> htmlAstRootGroup [
+	<generated>
+	<navigation: 'HtmlAstRoot'>
+	^ MooseSpecializedGroup with: self htmlAstRoot
 ]
 
 { #category : 'accessing' }

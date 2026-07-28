@@ -20,7 +20,10 @@ Class {
 		'famixTSourceAnchor',
 		'famixTSourceLanguage',
 		'famixTSourceEntity',
-		'famixTHasImmediateSource'
+		'famixTHasImmediateSource',
+		'fastHtmlDocument',
+		'fastScssStylesheet',
+		'fastTypeScriptModel'
 	],
 	#category : 'Famix-Angular-Generator',
 	#package : 'Famix-Angular-Generator'
@@ -47,7 +50,9 @@ FamixAngularGenerator class >> submetamodels [
 	^ {
 		  FamixTypeScriptGenerator.
 		  FASTHTMLMetamodelGenerator.
-		FamixGenerator }
+		  FASTSCSSMetamodelGenerator.
+		  FASTTypeScriptMetamodelGenerator.
+		  FamixGenerator }
 ]
 
 { #category : 'definition' }
@@ -67,7 +72,8 @@ FamixAngularGenerator >> defineClasses [
 	artifact := builder newClassNamed: #Artifact. "this is on top of template and style for css files; because both are files :)"
 	style := builder newClassNamed: #Style.
 
-	route := builder newClassNamed: #Route "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
+	route := builder newClassNamed: #Route. "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
+	
 ]
 
 { #category : 'definition' }
@@ -117,13 +123,8 @@ FamixAngularGenerator >> defineProperties [
 	artifact property: #isInline type: #Boolean.
 	artifact property: #path type: #String. "templateUrl / a styleUrl / later a json path"
 	artifact property: #content type: #String. "inline source, or file contents"
-	artifact property: #file type: #Object. "FileReference, transient"
-	artifact property: #ast type: #Object.
+	artifact property: #file type: #Object "FileReference, transient"
 
-	angularType property: #ast type: #Object
-
-	"template property: #ast type: #Object."
-	"template property: #templateFile type: #Object."
 ]
 
 { #category : 'definition' }
@@ -133,11 +134,26 @@ FamixAngularGenerator >> defineRelations [
 	"aless not sure about this"
 	super defineRelations.
 
+	"remote entities"
 	tsClass := self remoteEntity: #Class withPrefix: #FamixTypeScript.
+	fastHtmlDocument := self
+		                    remoteEntity: #Document
+		                    withPrefix: #FASTHTML.
+
+	fastScssStylesheet := self
+		                      remoteEntity: #Stylesheet
+		                      withPrefix: #FASTSCSS.
+
+	fastTypeScriptModel := self
+		                         remoteEntity: #Model
+		                         withPrefix: #FASTTypeScript.
 
 	"each Angular role is backed by exactly one TS class (1-1 association)"
 	(angularType property: #implementingClass)
 	- (tsClass property: #angularType).
+
+	(angularType property: #ast)
+	<>- (fastTypeScriptModel property: #angularTemplate).
 
 	"module declares many declarables; a declarable is declared by 0..1 module"
 	(ngModule property: #declarations)
@@ -164,6 +180,12 @@ FamixAngularGenerator >> defineRelations [
 	"template references components by selector"
 	(htmlTemplate property: #usedComponents)
 	*-* (component property: #usingTemplates).
+
+	(htmlTemplate property: #htmlAstRoot)
+	<>- (fastHtmlDocument property: #angularTemplate).
+
+	(style property: #styleAstRoot)
+	<>- (fastScssStylesheet property: #angularStyle).
 
 	"routing"
 	(route property: #targetComponent) -* (component property: #routes)

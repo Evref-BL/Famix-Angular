@@ -7,6 +7,11 @@
 |---|
 | `component` | `FamixAngularStyle` | `styles` | `FamixAngularComponent` | |
 
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `styleAstRoot` | `FamixAngularStyle` | `angularStyle` | `FASTSCSSStylesheet` | |
+
 
 
 "
@@ -51,4 +56,34 @@ FamixAngularStyle >> componentGroup [
 	<generated>
 	<navigation: 'Component'>
 	^ MooseSpecializedGroup with: self component
+]
+
+{ #category : 'accessing' }
+FamixAngularStyle >> styleAstRoot [
+	"Relation named: #styleAstRoot type: #FASTSCSSStylesheet opposite: #angularStyle"
+
+	<generated>
+	<FMProperty: #styleAstRoot type: #FASTSCSSStylesheet opposite: #angularStyle>
+	^ self attributeAt: #styleAstRoot ifAbsent: [ nil ]
+]
+
+{ #category : 'accessing' }
+FamixAngularStyle >> styleAstRoot: anObject [
+
+	<generated>
+	(self attributeAt: #styleAstRoot ifAbsentPut: [nil]) == anObject ifTrue: [ ^ anObject ].
+	anObject ifNil: [ | otherSide |
+		otherSide :=  self styleAstRoot.
+		self attributeAt: #styleAstRoot put: anObject.
+		otherSide angularStyle: nil ]
+	ifNotNil: [ 
+		self attributeAt: #styleAstRoot put: anObject.
+		anObject angularStyle: self ]
+]
+
+{ #category : 'navigation' }
+FamixAngularStyle >> styleAstRootGroup [
+	<generated>
+	<navigation: 'StyleAstRoot'>
+	^ MooseSpecializedGroup with: self styleAstRoot
 ]

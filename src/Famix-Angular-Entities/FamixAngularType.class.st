@@ -2,6 +2,11 @@
 ## Relations
 ======================
 
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `ast` | `FamixAngularType` | `angularTemplate` | `FASTTypeScriptModel` | |
+
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
 |---|
@@ -9,19 +14,12 @@
 | `injectedServices` | `FamixAngularType` | `injectingClients` | `FamixAngularService` | |
 
 
-## Properties
-======================
-
-| Name | Type | Default value | Comment |
-|---|
-| `ast` | `Object` | nil | |
 
 "
 Class {
 	#name : 'FamixAngularType',
 	#superclass : 'FamixAngularEntity',
 	#instVars : [
-		'#ast => FMProperty',
 		'#injectedServices => FMMany type: #FamixAngularService opposite: #injectingClients'
 	],
 	#category : 'Famix-Angular-Entities-Entities',
@@ -46,16 +44,32 @@ FamixAngularType >> addInjectedService: anObject [
 
 { #category : 'accessing' }
 FamixAngularType >> ast [
+	"Relation named: #ast type: #FASTTypeScriptModel opposite: #angularTemplate"
 
-	<FMProperty: #ast type: #Object>
 	<generated>
-	^ ast
+	<FMProperty: #ast type: #FASTTypeScriptModel opposite: #angularTemplate>
+	^ self attributeAt: #ast ifAbsent: [ nil ]
 ]
 
 { #category : 'accessing' }
 FamixAngularType >> ast: anObject [
+
 	<generated>
-	ast := anObject
+	(self attributeAt: #ast ifAbsentPut: [nil]) == anObject ifTrue: [ ^ anObject ].
+	anObject ifNil: [ | otherSide |
+		otherSide :=  self ast.
+		self attributeAt: #ast put: anObject.
+		otherSide angularTemplate: nil ]
+	ifNotNil: [ 
+		self attributeAt: #ast put: anObject.
+		anObject angularTemplate: self ]
+]
+
+{ #category : 'navigation' }
+FamixAngularType >> astGroup [
+	<generated>
+	<navigation: 'Ast'>
+	^ MooseSpecializedGroup with: self ast
 ]
 
 { #category : 'accessing' }

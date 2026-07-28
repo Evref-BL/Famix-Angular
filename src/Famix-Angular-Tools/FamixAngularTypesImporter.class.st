@@ -19,12 +19,13 @@ FamixAngularTypesImporter >> candidateClasses [
 { #category : 'instance creation' }
 FamixAngularTypesImporter >> createFrom: aTSClass [
 
-	| entity anchor |
+	| entity anchor parsedAST |
 	entity := self basicCreateFrom: aTSClass.
 	anchor := aTSClass sourceAnchor.
 	anchor ifNotNil: [
-		entity ast: (FASTTypeScriptParser new parse: anchor sourceText) ].
-	self fillMetadata: entity.              
+		parsedAST := FASTTypeScriptParser new parse: anchor sourceText.
+		entity ast: parsedAST ].
+	self fillMetadata: entity.
 	^ entity
 ]
 
