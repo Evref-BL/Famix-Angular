@@ -1,4 +1,13 @@
 "
+## Relations
+======================
+
+### Other
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `sourceAnchor` | `FamixTSourceEntity` | `element` | `FamixTSourceAnchor` | SourceAnchor entity linking to the original source code for this entity|
+
+
 ## Properties
 ======================
 
@@ -10,8 +19,8 @@
 Class {
 	#name : 'FamixAngularEntity',
 	#superclass : 'MooseEntity',
-	#traits : 'FamixTNamedEntity',
-	#classTraits : 'FamixTNamedEntity classTrait',
+	#traits : 'FamixTNamedEntity + FamixTSourceEntity',
+	#classTraits : 'FamixTNamedEntity classTrait + FamixTSourceEntity classTrait',
 	#category : 'Famix-Angular-Entities-Entities',
 	#package : 'Famix-Angular-Entities',
 	#tag : 'Entities'
@@ -39,6 +48,13 @@ FamixAngularEntity class >> metamodel [
 
 	<generated>
 	^ FamixAngularModel metamodel
+]
+
+{ #category : 'testing' }
+FamixAngularEntity >> isFileAnchor [
+
+	<generated>
+	^ false
 ]
 
 { #category : 'testing' }

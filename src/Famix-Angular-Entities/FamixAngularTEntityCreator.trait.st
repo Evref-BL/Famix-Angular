@@ -56,6 +56,13 @@ FamixAngularTEntityCreator >> newHTMLTemplate [
 ]
 
 { #category : 'entity creation' }
+FamixAngularTEntityCreator >> newIndexedFileAnchor [
+
+	<generated>
+	^ self add: FamixAngularIndexedFileAnchor new
+]
+
+{ #category : 'entity creation' }
 FamixAngularTEntityCreator >> newNgModule [
 
 	<generated>

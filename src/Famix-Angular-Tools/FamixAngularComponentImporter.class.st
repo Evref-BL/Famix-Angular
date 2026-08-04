@@ -69,12 +69,23 @@ FamixAngularComponentImporter >> extractTemplateFor: aComponent in: ast [
 { #category : 'as yet unclassified' }
 FamixAngularComponentImporter >> fillArtifact: anArtifact name: aName inlineContent: aString withParser: aParser for: aComponent [
 
-	| ast |
+	| ast anchor |
+	anchor := FamixAngularIndexedFileAnchor new
+		          element: anArtifact;
+		          mooseModel: angularModel;
+		          fileName: 'noName'; 
+		          startPos: 1;
+		          endPos: (aString ifNil: [ 0 ] ifNotNil: [ :c | c size ]);
+		 			 name: 'noName';
+		          yourself.
+
+
 	anArtifact
-		isInline: true;
-		content: aString;
+		sourceAnchor: anchor;
 		name: aName;
 		component: aComponent.
+	"content: aString;"
+	"isInline: true;"
 
 	ast := aParser parse: aString.
 
@@ -90,20 +101,31 @@ FamixAngularComponentImporter >> fillArtifact: anArtifact name: aName inlineCont
 { #category : 'as yet unclassified' }
 FamixAngularComponentImporter >> fillArtifact: anArtifact name: aName path: aPath withParser: aParser for: aComponent [
 
-	| file content ast |
+	| file content ast anchor |
 	file := self
 		        resolvePath: aPath
 		        fromSourceAnchor: aComponent implementingClass sourceAnchor.
 	content := file exists
 		           ifTrue: [ file contents ]
 		           ifFalse: [ nil ].
+
+	anchor := FamixAngularIndexedFileAnchor new
+		          element: anArtifact;
+		          mooseModel: angularModel;
+		          fileName: file fullName;
+		          startPos: 1;
+		          endPos: (content ifNil: [ 0 ] ifNotNil: [ :c | c size ]);
+		          name: file basename;
+		          yourself.
+
 	anArtifact
-		isInline: false;
-		path: aPath;
-		file: file;
-		content: content;
+		sourceAnchor: anchor;
 		name: aName;
 		component: aComponent.
+	"path: aPath;"
+	"file: file;"
+	"content: content;"
+	"isInline: false;"
 
 	ast := content ifNotNil: [ :c | aParser parse: c ].
 

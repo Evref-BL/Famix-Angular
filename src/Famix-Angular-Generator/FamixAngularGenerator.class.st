@@ -23,7 +23,8 @@ Class {
 		'famixTHasImmediateSource',
 		'fastHtmlDocument',
 		'fastScssStylesheet',
-		'fastTypeScriptModel'
+		'fastTypeScriptModel',
+		'indexedFileAnchor'
 	],
 	#category : 'Famix-Angular-Generator',
 	#package : 'Famix-Angular-Generator'
@@ -47,12 +48,14 @@ FamixAngularGenerator class >> prefix [
 { #category : 'accessing' }
 FamixAngularGenerator class >> submetamodels [
 
-	^ {
-		  FamixTypeScriptGenerator.
-		  FASTHTMLMetamodelGenerator.
-		  FASTSCSSMetamodelGenerator.
-		  FASTTypeScriptMetamodelGenerator.
-		  FamixGenerator }
+^ {
+	FamixTypeScriptGenerator.
+	FASTHTMLMetamodelGenerator.
+	FASTSCSSMetamodelGenerator.
+	FASTTypeScriptMetamodelGenerator.
+	FamixGenerator
+}
+
 ]
 
 { #category : 'definition' }
@@ -67,27 +70,31 @@ FamixAngularGenerator >> defineClasses [
 	directive := builder newClassNamed: #Directive.
 	pipe := builder newClassNamed: #Pipe.
 	service := builder newClassNamed: #Service.
+	indexedFileAnchor := builder newClassNamed: #IndexedFileAnchor.
 
 	htmlTemplate := builder newClassNamed: #HTMLTemplate. "Template represents a component's view: the HTML that Angular renders for that component. "
 	artifact := builder newClassNamed: #Artifact. "this is on top of template and style for css files; because both are files :)"
 	style := builder newClassNamed: #Style.
 
-	route := builder newClassNamed: #Route. "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
-	
+	route := builder newClassNamed: #Route "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
 ]
 
 { #category : 'definition' }
 FamixAngularGenerator >> defineHierarchy [
-	"super defineHierarchy."
+	"super defineHierarchy."   "leave disabled -- no longer needed"
 
 	sourceAnchor --|> famixTSourceAnchor.
 	sourceLanguage --|> famixTSourceLanguage.
-	sourcedEntity --|> famixTSourceEntity. 
-	namedEntity --|> famixTNamedEntity.
+	"sourcedEntity --|> famixTSourceEntity."   "REMOVE -- no longer used by anything"
+
+	indexedFileAnchor --|> sourceAnchor.
+	indexedFileAnchor --|> #TIndexedFileNavigation.
+
 	sourceTextAnchor --|> sourceAnchor.
 	sourceTextAnchor --|> famixTHasImmediateSource.
 
 	angularEntity --|> famixTNamedEntity.
+	angularEntity --|> famixTSourceEntity.   "compose the trait directly -- no intermediate entity, no cycle"
 
 	angularType --|> angularEntity.
 	ngModule --|> angularType.
@@ -97,12 +104,11 @@ FamixAngularGenerator >> defineHierarchy [
 	service --|> angularType.
 
 	artifact --|> angularEntity.
-	htmlTemplate --|> artifact. "this is for html"
-	style --|> artifact. "this is for css"
+	htmlTemplate --|> artifact.
+	style --|> artifact.
 
 	route --|> angularEntity.
 
-	"declarables"
 	component --|> tDeclarable.
 	directive --|> tDeclarable.
 	pipe --|> tDeclarable
@@ -115,16 +121,15 @@ FamixAngularGenerator >> defineProperties [
 
 	component property: #selector type: #String.
 	pipe property: #pipeName type: #String.
-	htmlTemplate property: #isInline type: #Boolean.
+	"htmlTemplate property: #isInline type: #Boolean."
 	htmlTemplate property: #templateUrl type: #String.
-	route property: #path type: #String.
+	route property: #path type: #String
 
 	"shared artifact properties"
-	artifact property: #isInline type: #Boolean.
-	artifact property: #path type: #String. "templateUrl / a styleUrl / later a json path"
-	artifact property: #content type: #String. "inline source, or file contents"
-	artifact property: #file type: #Object "FileReference, transient"
-
+	"artifact property: #isInline type: #Boolean."
+	"artifact property: #path type: #String." "templateUrl / a styleUrl / later a json path"
+	"artifact property: #content type: #String." "inline source, or file contents"
+	"artifact property: #file type: #Object" "FileReference, transient"
 ]
 
 { #category : 'definition' }

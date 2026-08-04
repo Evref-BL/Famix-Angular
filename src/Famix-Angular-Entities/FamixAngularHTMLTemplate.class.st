@@ -23,7 +23,6 @@
 
 | Name | Type | Default value | Comment |
 |---|
-| `isInline` | `Boolean` | nil | |
 | `templateUrl` | `String` | nil | |
 
 "
@@ -31,8 +30,8 @@ Class {
 	#name : 'FamixAngularHTMLTemplate',
 	#superclass : 'FamixAngularArtifact',
 	#instVars : [
-		'#component => FMOne type: #FamixAngularComponent opposite: #htmlTemplate',
 		'#templateUrl => FMProperty',
+		'#component => FMOne type: #FamixAngularComponent opposite: #htmlTemplate',
 		'#usedComponents => FMMany type: #FamixAngularComponent opposite: #usingTemplates'
 	],
 	#category : 'Famix-Angular-Entities-Entities',
@@ -107,20 +106,6 @@ FamixAngularHTMLTemplate >> htmlAstRootGroup [
 	<generated>
 	<navigation: 'HtmlAstRoot'>
 	^ MooseSpecializedGroup with: self htmlAstRoot
-]
-
-{ #category : 'accessing' }
-FamixAngularHTMLTemplate >> isInline [
-
-	<FMProperty: #isInline type: #Boolean>
-	<generated>
-	^ isInline
-]
-
-{ #category : 'accessing' }
-FamixAngularHTMLTemplate >> isInline: anObject [
-	<generated>
-	isInline := anObject
 ]
 
 { #category : 'accessing' }
