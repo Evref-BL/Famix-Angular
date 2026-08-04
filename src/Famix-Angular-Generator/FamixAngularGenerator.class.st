@@ -81,11 +81,12 @@ FamixAngularGenerator >> defineClasses [
 
 { #category : 'definition' }
 FamixAngularGenerator >> defineHierarchy [
-	"super defineHierarchy."   "leave disabled -- no longer needed"
+	"super defineHierarchy."
+
+	"removed to avoid conflicts between traits like TComments comming from FAST and Famix"
 
 	sourceAnchor --|> famixTSourceAnchor.
-	sourceLanguage --|> famixTSourceLanguage.
-	"sourcedEntity --|> famixTSourceEntity."   "REMOVE -- no longer used by anything"
+	"sourceLanguage --|> famixTSourceLanguage." "no need for it now"
 
 	indexedFileAnchor --|> sourceAnchor.
 	indexedFileAnchor --|> #TIndexedFileNavigation.
@@ -94,7 +95,7 @@ FamixAngularGenerator >> defineHierarchy [
 	sourceTextAnchor --|> famixTHasImmediateSource.
 
 	angularEntity --|> famixTNamedEntity.
-	angularEntity --|> famixTSourceEntity.   "compose the trait directly -- no intermediate entity, no cycle"
+	angularEntity --|> famixTSourceEntity.
 
 	angularType --|> angularEntity.
 	ngModule --|> angularType.
