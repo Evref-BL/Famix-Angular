@@ -24,7 +24,7 @@ FamixAngularComponentImporter >> extractStylesFor: aComponent in: ast [
 
 	| styles scssParser |
 	styles := OrderedCollection new.
-	scssParser := FASTSCSSParser new.
+	scssParser := FASTSCSSImporter new.
 	(self readDecoratorArrayArgument: 'styles' in: ast) do: [ :css |
 		css ifNotNil: [
 			styles add: (self
@@ -54,7 +54,7 @@ FamixAngularComponentImporter >> extractTemplateFor: aComponent in: ast [
 			  fillArtifact: FamixAngularHTMLTemplate new
 			  name: aComponent name , '_template'
 			  inlineContent: inline
-			  withParser: FASTHTMLParser new
+			  withParser: FASTHTMLImporter new
 			  for: aComponent ].
 	path := self readDecoratorArgument: 'templateUrl' in: ast.
 	path ifNil: [ ^ nil ].
@@ -62,7 +62,7 @@ FamixAngularComponentImporter >> extractTemplateFor: aComponent in: ast [
 		  fillArtifact: FamixAngularHTMLTemplate new
 		  name: aComponent name , '_template'
 		  path: path
-		  withParser: FASTHTMLParser new
+		  withParser: FASTHTMLImporter new
 		  for: aComponent
 ]
 

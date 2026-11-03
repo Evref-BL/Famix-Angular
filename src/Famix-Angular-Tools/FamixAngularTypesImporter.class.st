@@ -48,53 +48,50 @@ FamixAngularTypesImporter >> readDecoratorArgument: aKey in: anAst [
 
 	^ (anAst allWithType: FASTTypeScriptPair)
 		  detect: [ :pair |
-			  pair children anySatisfy: [ :child |
-				  child class = FASTTypeScriptPropertyIdentifier and: [
-					  child sourceCode = aKey ] ] ]
+				  pair containedEntities anySatisfy: [ :child |
+						  child class = FASTTypeScriptPropertyIdentifier and: [
+							  child sourceCode = aKey ] ] ]
 		  ifFound: [ :pair | self stringValueOf: pair ]
 		  ifNone: [ nil ]
 ]
 
 { #category : 'as yet unclassified' }
 FamixAngularTypesImporter >> readDecoratorArrayArgument: aKey in: anAst [
+
 	^ (anAst allWithType: FASTTypeScriptPair)
 		  detect: [ :pair |
-			  pair children anySatisfy: [ :child |
-				  child class = FASTTypeScriptPropertyIdentifier and: [
-					  child sourceCode = aKey ] ] ]
+				  pair containedEntities anySatisfy: [ :child |
+						  child class = FASTTypeScriptPropertyIdentifier and: [
+							  child sourceCode = aKey ] ] ]
 		  ifFound: [ :pair | self stringValuesOf: pair ]
 		  ifNone: [ #(  ) ]
 ]
 
 { #category : 'as yet unclassified' }
 FamixAngularTypesImporter >> stringValueOf: aPair [
+
 	| valueString |
-	valueString := aPair children
-		detect: [ :e | e class = FASTTypeScriptString ]
-		ifNone: [ nil ].
-	^ valueString
-		ifNil: [ nil ]
-		ifNotNil: [
-			(valueString children
-				detect: [ :e | e class = FASTTypeScriptStringFragment ]
-				ifNone: [ nil ])
-				ifNotNil: [ :frag | frag sourceCode ] ]
+	valueString := aPair containedEntities
+		               detect: [ :e | e class = FASTTypeScriptString ]
+		               ifNone: [ nil ].
+	^ valueString ifNil: [ nil ] ifNotNil: [
+			  (valueString containedEntities
+				   detect: [ :e | e class = FASTTypeScriptStringFragment ]
+				   ifNone: [ nil ]) ifNotNil: [ :frag | frag sourceCode ] ]
 ]
 
 { #category : 'as yet unclassified' }
 FamixAngularTypesImporter >> stringValuesOf: aPair [
 
-| identifiers |
-
-identifiers := aPair allChildren select: [ :e |
-	e class = FASTTypeScriptIdentifier ].
-^ identifiers
-	ifNotEmpty: [ identifiers collect: [ :id | id sourceCode ] ]
-	ifEmpty: [
-		(aPair allChildren select: [ :e | e class = FASTTypeScriptString ])
-			collect: [ :str |
-				(str allChildren
-					detect: [ :e | e class = FASTTypeScriptStringFragment ]
-					ifNone: [ nil ])
-				ifNotNil: [ :frag | frag sourceCode ] ] ]
+	| identifiers |
+	identifiers := aPair allContainedEntities select: [ :e |
+		               e class = FASTTypeScriptIdentifier ].
+	^ identifiers
+		  ifNotEmpty: [ identifiers collect: [ :id | id sourceCode ] ]
+		  ifEmpty: [
+				  (aPair allContainedEntities select: [ :e |
+					   e class = FASTTypeScriptString ]) collect: [ :str |
+						  (str allChildren
+							   detect: [ :e | e class = FASTTypeScriptStringFragment ]
+							   ifNone: [ nil ]) ifNotNil: [ :frag | frag sourceCode ] ] ]
 ]
