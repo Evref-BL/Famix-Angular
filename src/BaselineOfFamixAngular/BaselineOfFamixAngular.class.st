@@ -37,7 +37,11 @@ BaselineOfFamixAngular >> defineDependencies: spec [
 		
 		baseline: 'FASTHTML'
 		with: [
-		spec repository: 'github://Evref-BL/FAST-HTML:main' ]
+		spec repository: 'github://Evref-BL/FAST-HTML:main' ];
+		
+		baseline: 'FASTAngular'
+		with: [
+		spec repository: 'github://moosetechnology/FASTAngular:main' ]
 ]
 
 { #category : 'baselines' }
@@ -58,7 +62,7 @@ BaselineOfFamixAngular >> definePackages: spec [
 		package: 'Famix-Angular-Generator'
 			with: [ spec requires: #( 'FamixTypeScript' ) ];
 		package: 'Famix-Angular-Tools'
-			with: [ spec requires: #( 'Famix-Angular-Entities' 'FASTTypeScript' 'FASTSCSS'  'FASTHTML'  ) ];
+			with: [ spec requires: #( 'Famix-Angular-Entities' 'FASTTypeScript' 'FASTSCSS'  'FASTHTML' 'FASTAngular' ) ];
 		package: 'Famix-Angular-Tests'
 			with: [ spec requires: #( 'Famix-Angular-Tools' ) ]
 ]
