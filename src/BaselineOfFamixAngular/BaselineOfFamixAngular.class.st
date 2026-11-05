@@ -41,7 +41,7 @@ BaselineOfFamixAngular >> defineDependencies: spec [
 		
 		baseline: 'FASTAngular'
 		with: [
-		spec repository: 'github://moosetechnology/FASTAngular:main' ]
+		spec repository: 'github://Evref-BL/FASTAngular:main' ]
 ]
 
 { #category : 'baselines' }
