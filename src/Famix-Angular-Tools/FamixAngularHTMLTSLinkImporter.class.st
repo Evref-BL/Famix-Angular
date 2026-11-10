@@ -1,10 +1,10 @@
 "
-I link component class members (TypeScript sources) to their uses in the component template (HTML references).
+I link component class members (TypeScript sources) to their uses in the component template (HTML references). I am abstract: each subclass handles one Angular syntax by implementing #usagesIn: (the HTML node -> FASTAngular node pairs to link) and #kind.
 
-For each structural directive I handle (see #linkedDirectives), FASTHTML gives the attribute and FASTAngular parses its value. Each identifier read from the component scope that names a member of the component class becomes a FamixAngularHTMLToTSLink:
+For each usage, each identifier read from the component scope that names a member of the component class becomes a FamixAngularHTMLToTSLink:
 - source: the member declaration (FASTTypeScript), container: the FASTTypeScriptProgram;
 - reference: the FASTAngularIdentifier, container: the FASTHTMLDocument.
-Template variables (let x of ..., ... as x) of the directive and of enclosing elements are local and never linked.
+Template variables (let x of ..., ... as x) declared by structural directives on the element or enclosing elements are local and never linked.
 "
 Class {
 	#name : 'FamixAngularHTMLTSLinkImporter',
@@ -22,20 +22,6 @@ FamixAngularHTMLTSLinkImporter >> declaredNamesIn: aDirective [
 				  id structuralAssignmentNameRefOwner notNil or: [
 					  id structuralExpressionAliasOwner notNil ] ]
 		  thenCollect: [ :id | id sourceCode ]
-]
-
-{ #category : 'html' }
-FamixAngularHTMLTSLinkImporter >> directivesIn: aDocument [
-	"FASTHTML attribute -> its FASTAngular structural directive"
-
-	| directives |
-	directives := Dictionary new.
-	(aDocument allContainedEntities select: [ :e |
-		 e class = FASTHTMLAttribute ]) do: [ :attribute |
-			(self linkedDirectives includes: (self nameOf: attribute)) ifTrue: [
-					(self parseDirective: attribute) ifNotNil: [ :directive |
-						directives at: attribute put: directive ] ] ].
-	^ directives
 ]
 
 { #category : 'html' }
@@ -90,14 +76,21 @@ FamixAngularHTMLTSLinkImporter >> isInLetAssignment: anIdentifier [
 						  e class = FASTAngularSpecialKeyword ] ] ]
 ]
 
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> kind [
+	"The kind of the links created, e.g. ngFor or interpolation"
+
+	^ self subclassResponsibility
+]
+
 { #category : 'running' }
-FamixAngularHTMLTSLinkImporter >> linkFrom: aSourceEnd to: aReferenceEnd attribute: anAttribute for: aComponent [
-	"The link is named after the HTML attribute it comes from, e.g. *ngFor='let item of items'"
+FamixAngularHTMLTSLinkImporter >> linkFrom: aSourceEnd to: aReferenceEnd usage: aUsage for: aComponent [
+	"The link is named after its Angular code, e.g. *ngFor='let item of items' or {{ user.name }}"
 
 	| link |
 	link := FamixAngularHTMLToTSLink new
-		        name: anAttribute sourceCode;
-		        kind: (self nameOf: anAttribute) allButFirst;
+		        name: aUsage value sourceCode;
+		        kind: self kind;
 		        source: aSourceEnd;
 		        reference: aReferenceEnd;
 		        yourself.
@@ -111,32 +104,26 @@ FamixAngularHTMLTSLinkImporter >> linkFrom: aSourceEnd to: aReferenceEnd attribu
 
 { #category : 'running' }
 FamixAngularHTMLTSLinkImporter >> linkTemplateOf: aComponent [
+	"A usage is an HTML node -> the FASTAngular node parsed from it (see #usagesIn:)"
 
-	| document program members directives |
+	| document program members scope |
 	document := aComponent htmlTemplate ifNotNil: [ :template |
 		            template ast ].
 	program := aComponent ast.
 	(document isNil or: [ program isNil ]) ifTrue: [ ^ self ].
 	members := self membersOf: aComponent.
-	directives := self directivesIn: document.
-	directives keysAndValuesDo: [ :attribute :directive |
+	scope := self structuralDirectivesIn: document.
+	(self usagesIn: document) do: [ :usage |
 			| locals |
-			locals := self localsVisibleAt: attribute in: directives.
-			(self readsIn: directive) do: [ :identifier |
+			locals := self localsVisibleAt: usage key in: scope.
+			(self readsIn: usage value) do: [ :identifier |
 					(locals includes: identifier sourceCode) ifFalse: [
 							members at: identifier sourceCode ifPresent: [ :member |
 									self
 										linkFrom: (self endOn: member in: program)
 										to: (self endOn: identifier in: document)
-										attribute: attribute
+										usage: usage
 										for: aComponent ] ] ] ]
-]
-
-{ #category : 'html' }
-FamixAngularHTMLTSLinkImporter >> linkedDirectives [
-	"HTML attributes whose value is parsed and linked"
-
-	^ #( '*ngFor' '*ngIf' )
 ]
 
 { #category : 'html' }
@@ -189,17 +176,20 @@ FamixAngularHTMLTSLinkImporter >> nameOf: aDeclaration as: anIdentifierClass [
 ]
 
 { #category : 'html' }
-FamixAngularHTMLTSLinkImporter >> parseDirective: anAttribute [
-	"Parse the attribute alone with FASTAngular. The source is left-padded so that
-	positions (and thus sourceCode) are those of the attribute in the HTML file."
+FamixAngularHTMLTSLinkImporter >> parse: aSource at: anHTMLNode [
+	"Parse with FASTAngular. aSource starts with a 3-character prefix (<x ...) and is left-padded
+	so that positions (and thus sourceCode) are those of anHTMLNode in the HTML file."
 
-	| source |
-	source := (String
-		           new: anAttribute startPos - 4
-		           withAll: Character space) , '<x '
-	          , anAttribute sourceCode , '>'.
-	^ ((FASTAngularImporter new parse: source) allWithType:
-		   FASTAngularStructuralDirective)
+	^ FASTAngularImporter new parse:
+		  (String new: anHTMLNode startPos - 4 withAll: Character space)
+		  , aSource
+]
+
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> parseDirective: anAttribute [
+
+	^ ((self parse: '<x ' , anAttribute sourceCode , '>' at: anAttribute)
+		   allWithType: FASTAngularStructuralDirective)
 		  ifEmpty: [ nil ]
 		  ifNotEmpty: [ :found | found first ]
 ]
@@ -216,4 +206,26 @@ FamixAngularHTMLTSLinkImporter >> run [
 
 	(angularModel allWithType: FamixAngularComponent) do: [ :component |
 		self linkTemplateOf: component ]
+]
+
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> structuralDirectivesIn: aDocument [
+	"Every structural directive (*ngFor, *ngIf, *ngTemplateOutlet...) as FASTHTML attribute -> FASTAngular directive.
+	All of them declare the template variables in scope, whichever importer links them."
+
+	| directives |
+	directives := Dictionary new.
+	(aDocument allContainedEntities select: [ :e |
+		 e class = FASTHTMLAttribute and: [
+			 (self nameOf: e) beginsWith: '*' ] ]) do: [ :attribute |
+			(self parseDirective: attribute) ifNotNil: [ :directive |
+				directives at: attribute put: directive ] ].
+	^ directives
+]
+
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> usagesIn: aDocument [
+	"The HTML node -> FASTAngular node pairs this importer links"
+
+	^ self subclassResponsibility
 ]

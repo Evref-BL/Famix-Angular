@@ -1,9 +1,16 @@
 Class {
 	#name : 'FamixAngularInjectionImporter',
-	#superclass : 'FamixAngularRelationImporter',
+	#superclass : 'FamixAngularCrossLanguageLinkImporter',
 	#category : 'Famix-Angular-Tools',
 	#package : 'Famix-Angular-Tools'
 }
+
+{ #category : 'accessing' }
+FamixAngularInjectionImporter >> allAngularTypes [
+
+	^ FamixAngularType withAllSubclasses flatCollect: [ :cls |
+		  angularModel allWithType: cls ]
+]
 
 { #category : 'as yet unclassified' }
 FamixAngularInjectionImporter >> constructorOf: aTSClass [   
@@ -36,4 +43,11 @@ FamixAngularInjectionImporter >> run [
 				servicesByName
 					at: (self simpleNameOf: injectedType )
 					ifPresent: [ :service | client injectedServices add: service ] ] ] ]
+]
+
+{ #category : 'accessing' }
+FamixAngularInjectionImporter >> simpleNameOf: aType [  
+	| n |
+	n := aType name.
+	^ (n includes: $.) ifTrue: [ n copyAfterLast: $. ] ifFalse: [ n ] 
 ]

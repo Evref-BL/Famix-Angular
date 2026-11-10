@@ -10,7 +10,7 @@ Class {
 
 { #category : 'running' }
 FamixAngularHTMLTSLinkImporterTest >> linksFor: aClassSource template: anHTMLSource [
-	"Import links for a component made of aClassSource and its template"
+	"Import links, with every concrete HTML-TS link importer, for a component made of aClassSource and its template"
 
 	| model component |
 	model := FamixAngularModel new.
@@ -19,16 +19,61 @@ FamixAngularHTMLTSLinkImporterTest >> linksFor: aClassSource template: anHTMLSou
 		             ast:
 			             ((FASTTypeScriptParser new parse: aClassSource)
 				              allWithType: FASTTypeScriptProgram) first;
-		             htmlTemplate:
-			             (FamixAngularHTMLTemplate new ast:
+		             htmlTemplate: (FamixAngularHTMLTemplate new ast:
 					              ((FASTHTMLImporter new parse: anHTMLSource)
 						               allWithType: FASTHTMLDocument) first);
 		             yourself.
 	model add: component.
-	FamixAngularHTMLTSLinkImporter new
-		tsModel: nil angularModel: model;
-		run.
+	(FamixAngularHTMLTSLinkImporter allSubclasses reject: [ :each |
+		 each isAbstract ]) do: [ :each |
+			each new
+				tsModel: nil angularModel: model;
+				run ].
 	^ component crossLanguageLinks
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testInterpolationLinksOnlyTheObjectOfAMemberAccess [
+
+	| links |
+	links := self
+		         linksFor: 'class C { user: User; name = 1; }'
+		         template: '<p>{{ user.name }}</p>'.
+	self assert: links size equals: 1.
+	self assert: links first name equals: '{{ user.name }}'.
+	self assert: links first kind equals: 'interpolation'.
+	self assert: links first reference entity sourceCode equals: 'user'.
+	self assert: links first source name equals: 'user: User'
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testInterpolationOfTemplateVariableIsNotLinked [
+
+	| links |
+	links := self
+		         linksFor: 'class C { users = []; user = 1; title = 2; }'
+		         template:
+		         '<div *ngFor="let user of users"><p>{{ user.name }} {{ title | uppercase }}</p></div>'.
+	self
+		assertCollection: (links collect: #name)
+		hasSameElements:
+		#( '*ngFor="let user of users"' '{{ title | uppercase }}' )
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testInterpolationReferencePositionIsInTheHTMLFile [
+
+	| html link |
+	html := '<div>
+  <span>{{ count }}</span>
+</div>'.
+	link := (self linksFor: 'class C { count = 0; }' template: html)
+		        first.
+	self
+		assert: (html
+				 copyFrom: link reference entity startPos
+				 to: link reference entity endPos)
+		equals: 'count'
 ]
 
 { #category : 'tests' }

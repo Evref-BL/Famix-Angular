@@ -24,7 +24,7 @@ FamixAngularImporter >> importAngularModelFrom: aTSModel [
 			imp
 				tsModel: tsModel angularModel: angularModel;
 				run ].
-	self importRelations.
+	
 	self importCrossLanguageLinks.
 	^ angularModel
 ]
@@ -37,14 +37,4 @@ FamixAngularImporter >> importCrossLanguageLinks [
 			c new
 				tsModel: tsModel angularModel: angularModel;
 				run ]
-]
-
-{ #category : 'as yet unclassified' }
-FamixAngularImporter >> importRelations [ 
-
-	(FamixAngularRelationImporter allSubclasses reject: [ :c | c isAbstract ])
-		do: [ :c |
-			c new
-				tsModel: tsModel angularModel: angularModel;
-				run ] 
 ]
