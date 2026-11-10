@@ -26,20 +26,24 @@ Class {
 { #category : 'meta' }
 FamixAngularService class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Service super: #FamixAngularType>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]
 
 { #category : 'adding' }
 FamixAngularService >> addInjectingClient: anObject [
+
+	<ignoreForCoverage>
 	<generated>
 	^ self injectingClients add: anObject
 ]
 
 { #category : 'adding' }
 FamixAngularService >> addProvidingModule: anObject [
+
+	<ignoreForCoverage>
 	<generated>
 	^ self providingModules add: anObject
 ]
@@ -48,6 +52,7 @@ FamixAngularService >> addProvidingModule: anObject [
 FamixAngularService >> injectingClients [
 	"Relation named: #injectingClients type: #FamixAngularType opposite: #injectedServices"
 
+	<ignoreForCoverage>
 	<generated>
 	^ injectingClients
 ]
@@ -55,6 +60,7 @@ FamixAngularService >> injectingClients [
 { #category : 'accessing' }
 FamixAngularService >> injectingClients: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	injectingClients value: anObject
 ]
@@ -63,6 +69,7 @@ FamixAngularService >> injectingClients: anObject [
 FamixAngularService >> providingModules [
 	"Relation named: #providingModules type: #FamixAngularNgModule opposite: #providedServices"
 
+	<ignoreForCoverage>
 	<generated>
 	^ providingModules
 ]
@@ -70,6 +77,7 @@ FamixAngularService >> providingModules [
 { #category : 'accessing' }
 FamixAngularService >> providingModules: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	providingModules value: anObject
 ]

@@ -23,8 +23,8 @@ Class {
 { #category : 'meta' }
 FamixAngularDirective class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Directive super: #FamixAngularType>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]

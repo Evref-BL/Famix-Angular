@@ -5,6 +5,7 @@
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
 |---|
+| `crossLanguageLinks` | `FamixAngularComponent` | `component` | `FamixAngularCrossLanguageLink` | |
 | `htmlTemplate` | `FamixAngularComponent` | `component` | `FamixAngularHTMLTemplate` | |
 | `styles` | `FamixAngularComponent` | `component` | `FamixAngularStyle` | |
 
@@ -30,11 +31,12 @@ Class {
 	#traits : 'FamixAngularTDeclarable',
 	#classTraits : 'FamixAngularTDeclarable classTrait',
 	#instVars : [
-		'#selector => FMProperty',
+		'#crossLanguageLinks => FMMany type: #FamixAngularCrossLanguageLink opposite: #component',
 		'#htmlTemplate => FMOne type: #FamixAngularHTMLTemplate opposite: #component',
+		'#routes => FMOne type: #FamixAngularRoute opposite: #targetComponent',
+		'#selector => FMProperty',
 		'#styles => FMMany type: #FamixAngularStyle opposite: #component',
-		'#usingTemplates => FMMany type: #FamixAngularHTMLTemplate opposite: #usedComponents',
-		'#routes => FMOne type: #FamixAngularRoute opposite: #targetComponent'
+		'#usingTemplates => FMMany type: #FamixAngularHTMLTemplate opposite: #usedComponents'
 	],
 	#category : 'Famix-Angular-Entities-Entities',
 	#package : 'Famix-Angular-Entities',
@@ -44,28 +46,59 @@ Class {
 { #category : 'meta' }
 FamixAngularComponent class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Component super: #FamixAngularType>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
+]
+
+{ #category : 'adding' }
+FamixAngularComponent >> addCrossLanguageLink: anObject [
+
+	<ignoreForCoverage>
+	<generated>
+	^ self crossLanguageLinks add: anObject
 ]
 
 { #category : 'adding' }
 FamixAngularComponent >> addStyle: anObject [
+
+	<ignoreForCoverage>
 	<generated>
 	^ self styles add: anObject
 ]
 
 { #category : 'adding' }
 FamixAngularComponent >> addUsingTemplate: anObject [
+
+	<ignoreForCoverage>
 	<generated>
 	^ self usingTemplates add: anObject
+]
+
+{ #category : 'accessing' }
+FamixAngularComponent >> crossLanguageLinks [
+	"Relation named: #crossLanguageLinks type: #FamixAngularCrossLanguageLink opposite: #component"
+
+	<ignoreForCoverage>
+	<generated>
+	<derived>
+	^ crossLanguageLinks
+]
+
+{ #category : 'accessing' }
+FamixAngularComponent >> crossLanguageLinks: anObject [
+
+	<ignoreForCoverage>
+	<generated>
+	crossLanguageLinks value: anObject
 ]
 
 { #category : 'accessing' }
 FamixAngularComponent >> htmlTemplate [
 	"Relation named: #htmlTemplate type: #FamixAngularHTMLTemplate opposite: #component"
 
+	<ignoreForCoverage>
 	<generated>
 	^ htmlTemplate
 ]
@@ -73,21 +106,16 @@ FamixAngularComponent >> htmlTemplate [
 { #category : 'accessing' }
 FamixAngularComponent >> htmlTemplate: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	htmlTemplate := anObject
-]
-
-{ #category : 'navigation' }
-FamixAngularComponent >> htmlTemplateGroup [
-	<generated>
-	<navigation: 'HtmlTemplate'>
-	^ MooseSpecializedGroup with: self htmlTemplate
 ]
 
 { #category : 'accessing' }
 FamixAngularComponent >> routes [
 	"Relation named: #routes type: #FamixAngularRoute opposite: #targetComponent"
 
+	<ignoreForCoverage>
 	<generated>
 	^ routes
 ]
@@ -95,6 +123,7 @@ FamixAngularComponent >> routes [
 { #category : 'accessing' }
 FamixAngularComponent >> routes: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	routes := anObject
 ]
@@ -103,12 +132,14 @@ FamixAngularComponent >> routes: anObject [
 FamixAngularComponent >> selector [
 
 	<FMProperty: #selector type: #String>
+	<ignoreForCoverage>
 	<generated>
 	^ selector
 ]
 
 { #category : 'accessing' }
 FamixAngularComponent >> selector: anObject [
+	<ignoreForCoverage>
 	<generated>
 	selector := anObject
 ]
@@ -117,6 +148,7 @@ FamixAngularComponent >> selector: anObject [
 FamixAngularComponent >> styles [
 	"Relation named: #styles type: #FamixAngularStyle opposite: #component"
 
+	<ignoreForCoverage>
 	<generated>
 	<derived>
 	^ styles
@@ -125,21 +157,16 @@ FamixAngularComponent >> styles [
 { #category : 'accessing' }
 FamixAngularComponent >> styles: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	styles value: anObject
-]
-
-{ #category : 'navigation' }
-FamixAngularComponent >> stylesGroup [
-	<generated>
-	<navigation: 'Styles'>
-	^ MooseSpecializedGroup withAll: self styles asSet
 ]
 
 { #category : 'accessing' }
 FamixAngularComponent >> usingTemplates [
 	"Relation named: #usingTemplates type: #FamixAngularHTMLTemplate opposite: #usedComponents"
 
+	<ignoreForCoverage>
 	<generated>
 	^ usingTemplates
 ]
@@ -147,6 +174,7 @@ FamixAngularComponent >> usingTemplates [
 { #category : 'accessing' }
 FamixAngularComponent >> usingTemplates: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	usingTemplates value: anObject
 ]

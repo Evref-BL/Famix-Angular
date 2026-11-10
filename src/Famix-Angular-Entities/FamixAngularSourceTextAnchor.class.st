@@ -29,8 +29,8 @@ Class {
 { #category : 'meta' }
 FamixAngularSourceTextAnchor class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #SourceTextAnchor super: #FamixAngularSourceAnchor>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]

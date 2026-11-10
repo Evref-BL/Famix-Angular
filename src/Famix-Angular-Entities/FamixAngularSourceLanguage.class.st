@@ -9,8 +9,8 @@ Class {
 { #category : 'meta' }
 FamixAngularSourceLanguage class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #SourceLanguage super: #FamixAngularEntity>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]

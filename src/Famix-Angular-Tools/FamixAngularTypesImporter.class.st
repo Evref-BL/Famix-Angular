@@ -19,12 +19,13 @@ FamixAngularTypesImporter >> candidateClasses [
 { #category : 'instance creation' }
 FamixAngularTypesImporter >> createFrom: aTSClass [
 
-	| entity anchor parsedAST |
+	| entity anchor |
 	entity := self basicCreateFrom: aTSClass.
 	anchor := aTSClass sourceAnchor.
 	anchor ifNotNil: [
-		parsedAST := FASTTypeScriptParser new parse: anchor sourceText.
-		entity ast: parsedAST ].
+			entity ast:
+				((FASTTypeScriptParser new parse: anchor sourceText) allWithType:
+					 FASTTypeScriptProgram) first ].
 	self fillMetadata: entity.
 	^ entity
 ]
@@ -40,58 +41,74 @@ FamixAngularTypesImporter >> fillMetadata: angularType [
  
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'reading' }
+FamixAngularTypesImporter >> isStringNode: aNode [
+	"Quoted string or backtick template string"
+
+	^ aNode class = FASTTypeScriptString or: [
+		  aNode class = FASTTypeScriptTemplateString ]
+]
+
+{ #category : 'reading' }
+FamixAngularTypesImporter >> pairNamed: aKey in: anAst [
+	"The key: value pair named aKey in anAst (a FASTTypeScriptProgram), or nil"
+
+	^ anAst allContainedEntities
+		  detect: [ :e |
+				  e class = FASTTypeScriptPair and: [
+						  e containedEntities anySatisfy: [ :child |
+								  child class = FASTTypeScriptPropertyIdentifier and: [
+									  child sourceCode = aKey ] ] ] ]
+		  ifNone: [ nil ]
+]
+
+{ #category : 'reading' }
 FamixAngularTypesImporter >> readDecoratorArgument: aKey in: anAst [
 	"I hate this and prefer MoTion; but ok for now"
 
 	"we are using it to get key and value from decorator in Angular componenents for example"
 
-	^ (anAst allWithType: FASTTypeScriptPair)
-		  detect: [ :pair |
-				  pair containedEntities anySatisfy: [ :child |
-						  child class = FASTTypeScriptPropertyIdentifier and: [
-							  child sourceCode = aKey ] ] ]
-		  ifFound: [ :pair | self stringValueOf: pair ]
-		  ifNone: [ nil ]
+	^ (self pairNamed: aKey in: anAst) ifNotNil: [ :pair |
+		  self stringValueOf: pair ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'reading' }
 FamixAngularTypesImporter >> readDecoratorArrayArgument: aKey in: anAst [
 
-	^ (anAst allWithType: FASTTypeScriptPair)
-		  detect: [ :pair |
-				  pair containedEntities anySatisfy: [ :child |
-						  child class = FASTTypeScriptPropertyIdentifier and: [
-							  child sourceCode = aKey ] ] ]
-		  ifFound: [ :pair | self stringValuesOf: pair ]
-		  ifNone: [ #(  ) ]
+	^ (self pairNamed: aKey in: anAst)
+		  ifNil: [ #(  ) ]
+		  ifNotNil: [ :pair | self stringValuesOf: pair ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'reading' }
 FamixAngularTypesImporter >> stringValueOf: aPair [
 
-	| valueString |
-	valueString := aPair containedEntities
-		               detect: [ :e | e class = FASTTypeScriptString ]
-		               ifNone: [ nil ].
-	^ valueString ifNil: [ nil ] ifNotNil: [
-			  (valueString containedEntities
-				   detect: [ :e | e class = FASTTypeScriptStringFragment ]
-				   ifNone: [ nil ]) ifNotNil: [ :frag | frag sourceCode ] ]
+	^ (aPair containedEntities
+		   detect: [ :e | self isStringNode: e ]
+		   ifNone: [ nil ]) ifNotNil: [ :str | self textOf: str ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'reading' }
 FamixAngularTypesImporter >> stringValuesOf: aPair [
 
 	| identifiers |
 	identifiers := aPair allContainedEntities select: [ :e |
 		               e class = FASTTypeScriptIdentifier ].
-	^ identifiers
-		  ifNotEmpty: [ identifiers collect: [ :id | id sourceCode ] ]
-		  ifEmpty: [
-				  (aPair allContainedEntities select: [ :e |
-					   e class = FASTTypeScriptString ]) collect: [ :str |
-						  (str allChildren
-							   detect: [ :e | e class = FASTTypeScriptStringFragment ]
-							   ifNone: [ nil ]) ifNotNil: [ :frag | frag sourceCode ] ] ]
+	identifiers ifNotEmpty: [
+		^ identifiers collect: [ :id | id sourceCode ] ].
+	^ (aPair allContainedEntities select: [ :e | self isStringNode: e ])
+		  collect: [ :str | self textOf: str ]
+]
+
+{ #category : 'reading' }
+FamixAngularTypesImporter >> textOf: aStringNode [
+	"Literal text of a string node, without its delimiters"
+
+	aStringNode class = FASTTypeScriptTemplateString ifTrue: [
+			^ aStringNode sourceCode
+				  copyFrom: 2
+				  to: aStringNode sourceCode size - 1 ].
+	^ (aStringNode containedEntities
+		   detect: [ :e | e class = FASTTypeScriptStringFragment ]
+		   ifNone: [ nil ]) ifNotNil: [ :fragment | fragment sourceCode ]
 ]

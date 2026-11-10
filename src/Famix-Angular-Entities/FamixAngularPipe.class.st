@@ -32,22 +32,24 @@ Class {
 { #category : 'meta' }
 FamixAngularPipe class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Pipe super: #FamixAngularType>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]
 
 { #category : 'accessing' }
 FamixAngularPipe >> pipeName [
 
 	<FMProperty: #pipeName type: #String>
+	<ignoreForCoverage>
 	<generated>
 	^ pipeName
 ]
 
 { #category : 'accessing' }
 FamixAngularPipe >> pipeName: anObject [
+	<ignoreForCoverage>
 	<generated>
 	pipeName := anObject
 ]

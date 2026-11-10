@@ -24,8 +24,8 @@ Class {
 { #category : 'meta' }
 FamixAngularIndexedFileAnchor class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #IndexedFileAnchor super: #FamixAngularSourceAnchor>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]

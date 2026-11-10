@@ -9,16 +9,17 @@ Class {
 { #category : 'meta' }
 FamixAngularSourcedEntity class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #SourcedEntity super: #FamixAngularEntity>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
 	<abstract>
-	^ self
 ]
 
 { #category : 'testing' }
 FamixAngularSourcedEntity class >> isAbstract [
 
+	<ignoreForCoverage>
 	<generated>
 	^ self == FamixAngularSourcedEntity
 ]

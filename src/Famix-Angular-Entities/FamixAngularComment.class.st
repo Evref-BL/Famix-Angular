@@ -9,8 +9,8 @@ Class {
 { #category : 'meta' }
 FamixAngularComment class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Comment super: #FamixAngularEntity>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]

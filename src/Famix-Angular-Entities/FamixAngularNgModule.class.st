@@ -26,20 +26,24 @@ Class {
 { #category : 'meta' }
 FamixAngularNgModule class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #NgModule super: #FamixAngularType>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]
 
 { #category : 'adding' }
 FamixAngularNgModule >> addDeclaration: anObject [
+
+	<ignoreForCoverage>
 	<generated>
 	^ self declarations add: anObject
 ]
 
 { #category : 'adding' }
 FamixAngularNgModule >> addProvidedService: anObject [
+
+	<ignoreForCoverage>
 	<generated>
 	^ self providedServices add: anObject
 ]
@@ -48,6 +52,7 @@ FamixAngularNgModule >> addProvidedService: anObject [
 FamixAngularNgModule >> declarations [
 	"Relation named: #declarations type: #FamixAngularTDeclarable opposite: #declaringModule"
 
+	<ignoreForCoverage>
 	<generated>
 	<derived>
 	^ declarations
@@ -56,6 +61,7 @@ FamixAngularNgModule >> declarations [
 { #category : 'accessing' }
 FamixAngularNgModule >> declarations: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	declarations value: anObject
 ]
@@ -64,6 +70,7 @@ FamixAngularNgModule >> declarations: anObject [
 FamixAngularNgModule >> providedServices [
 	"Relation named: #providedServices type: #FamixAngularService opposite: #providingModules"
 
+	<ignoreForCoverage>
 	<generated>
 	<derived>
 	^ providedServices
@@ -72,6 +79,7 @@ FamixAngularNgModule >> providedServices [
 { #category : 'accessing' }
 FamixAngularNgModule >> providedServices: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	providedServices value: anObject
 ]

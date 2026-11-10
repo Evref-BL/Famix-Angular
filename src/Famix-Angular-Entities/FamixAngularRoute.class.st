@@ -31,14 +31,16 @@ Class {
 { #category : 'meta' }
 FamixAngularRoute class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Route super: #FamixAngularEntity>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]
 
 { #category : 'adding' }
 FamixAngularRoute >> addTargetComponent: anObject [
+
+	<ignoreForCoverage>
 	<generated>
 	^ self targetComponent add: anObject
 ]
@@ -47,12 +49,14 @@ FamixAngularRoute >> addTargetComponent: anObject [
 FamixAngularRoute >> path [
 
 	<FMProperty: #path type: #String>
+	<ignoreForCoverage>
 	<generated>
 	^ path
 ]
 
 { #category : 'accessing' }
 FamixAngularRoute >> path: anObject [
+	<ignoreForCoverage>
 	<generated>
 	path := anObject
 ]
@@ -61,6 +65,7 @@ FamixAngularRoute >> path: anObject [
 FamixAngularRoute >> targetComponent [
 	"Relation named: #targetComponent type: #FamixAngularComponent opposite: #routes"
 
+	<ignoreForCoverage>
 	<generated>
 	<derived>
 	^ targetComponent
@@ -69,6 +74,7 @@ FamixAngularRoute >> targetComponent [
 { #category : 'accessing' }
 FamixAngularRoute >> targetComponent: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	targetComponent value: anObject
 ]

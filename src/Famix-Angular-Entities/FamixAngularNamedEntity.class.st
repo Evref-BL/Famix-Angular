@@ -9,16 +9,17 @@ Class {
 { #category : 'meta' }
 FamixAngularNamedEntity class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #NamedEntity super: #FamixAngularEntity>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
 	<abstract>
-	^ self
 ]
 
 { #category : 'testing' }
 FamixAngularNamedEntity class >> isAbstract [
 
+	<ignoreForCoverage>
 	<generated>
 	^ self == FamixAngularNamedEntity
 ]
@@ -26,6 +27,7 @@ FamixAngularNamedEntity class >> isAbstract [
 { #category : 'testing' }
 FamixAngularNamedEntity >> isNamedEntity [
 
+	<ignoreForCoverage>
 	<generated>
 	^ true
 ]

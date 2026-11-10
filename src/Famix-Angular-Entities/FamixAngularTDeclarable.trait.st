@@ -23,16 +23,17 @@ Trait {
 { #category : 'meta' }
 FamixAngularTDeclarable classSide >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #TDeclarable super: #Object>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]
 
 { #category : 'accessing' }
 FamixAngularTDeclarable >> declaringModule [
 	"Relation named: #declaringModule type: #FamixAngularNgModule opposite: #declarations"
 
+	<ignoreForCoverage>
 	<generated>
 	^ declaringModule
 ]
@@ -40,6 +41,7 @@ FamixAngularTDeclarable >> declaringModule [
 { #category : 'accessing' }
 FamixAngularTDeclarable >> declaringModule: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	declaringModule := anObject
 ]

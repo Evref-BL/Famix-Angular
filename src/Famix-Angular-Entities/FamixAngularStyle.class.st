@@ -10,7 +10,7 @@
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
 |---|
-| `styleAstRoot` | `FamixAngularStyle` | `angularStyle` | `FASTSCSSStylesheet` | |
+| `ast` | `FamixAngularStyle` | `angularStyle` | `FASTSCSSStylesheet` | |
 
 
 
@@ -29,16 +29,42 @@ Class {
 { #category : 'meta' }
 FamixAngularStyle class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Style super: #FamixAngularArtifact>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
+]
+
+{ #category : 'accessing' }
+FamixAngularStyle >> ast [
+	"Relation named: #ast type: #FASTSCSSStylesheet opposite: #angularStyle"
+
+	<ignoreForCoverage>
+	<generated>
+	<FMProperty: #ast type: #FASTSCSSStylesheet opposite: #angularStyle>
+	^ self attributeAt: #ast ifAbsent: [ nil ]
+]
+
+{ #category : 'accessing' }
+FamixAngularStyle >> ast: anObject [
+
+	<ignoreForCoverage>
+	<generated>
+	(self attributeAt: #ast ifAbsentPut: [nil]) == anObject ifTrue: [ ^ anObject ].
+	anObject ifNil: [ | otherSide |
+		otherSide :=  self ast.
+		self attributeAt: #ast put: anObject.
+		otherSide angularStyle: nil ]
+	ifNotNil: [ 
+		self attributeAt: #ast put: anObject.
+		anObject angularStyle: self ]
 ]
 
 { #category : 'accessing' }
 FamixAngularStyle >> component [
 	"Relation named: #component type: #FamixAngularComponent opposite: #styles"
 
+	<ignoreForCoverage>
 	<generated>
 	<container>
 	^ component
@@ -47,43 +73,7 @@ FamixAngularStyle >> component [
 { #category : 'accessing' }
 FamixAngularStyle >> component: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	component := anObject
-]
-
-{ #category : 'navigation' }
-FamixAngularStyle >> componentGroup [
-	<generated>
-	<navigation: 'Component'>
-	^ MooseSpecializedGroup with: self component
-]
-
-{ #category : 'accessing' }
-FamixAngularStyle >> styleAstRoot [
-	"Relation named: #styleAstRoot type: #FASTSCSSStylesheet opposite: #angularStyle"
-
-	<generated>
-	<FMProperty: #styleAstRoot type: #FASTSCSSStylesheet opposite: #angularStyle>
-	^ self attributeAt: #styleAstRoot ifAbsent: [ nil ]
-]
-
-{ #category : 'accessing' }
-FamixAngularStyle >> styleAstRoot: anObject [
-
-	<generated>
-	(self attributeAt: #styleAstRoot ifAbsentPut: [nil]) == anObject ifTrue: [ ^ anObject ].
-	anObject ifNil: [ | otherSide |
-		otherSide :=  self styleAstRoot.
-		self attributeAt: #styleAstRoot put: anObject.
-		otherSide angularStyle: nil ]
-	ifNotNil: [ 
-		self attributeAt: #styleAstRoot put: anObject.
-		anObject angularStyle: self ]
-]
-
-{ #category : 'navigation' }
-FamixAngularStyle >> styleAstRootGroup [
-	<generated>
-	<navigation: 'StyleAstRoot'>
-	^ MooseSpecializedGroup with: self styleAstRoot
 ]

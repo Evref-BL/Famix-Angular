@@ -10,13 +10,17 @@ Class {
 
 { #category : 'accessing' }
 FamixAngularModel class >> allSubmetamodelsPackagesNames [
+
+	<ignoreForCoverage>
 	<generated>
 	^ #(#'Moose-Query' #'Famix-TypeScript-Entities' #'Famix-Traits' #'FAST-TypeScript-Model' #'FAST-SCSS-Model' #'FAST-HTML-Model' #'FAST-Core-Model')
 ]
 
 { #category : 'meta' }
 FamixAngularModel class >> annotation [
-	<FMClass: #FamixAngularModel super: #MooseModel>
-	<package: #FamixAngular>
+
+	<ignoreForCoverage>
+	<FMClass: #Model super: #MooseModel>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
 ]

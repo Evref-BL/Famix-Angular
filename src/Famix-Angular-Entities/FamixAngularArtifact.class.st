@@ -9,8 +9,8 @@ Class {
 { #category : 'meta' }
 FamixAngularArtifact class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Artifact super: #FamixAngularEntity>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]

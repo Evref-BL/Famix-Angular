@@ -1,9 +1,10 @@
 Extension { #name : 'FamixTypeScriptClass' }
 
-{ #category : '*Famix-Angular-Entities-accessing' }
+{ #category : '*Famix-Angular-Entities' }
 FamixTypeScriptClass >> angularType [
 	"Relation named: #angularType type: #FamixAngularType opposite: #implementingClass"
 
+	<ignoreForCoverage>
 	<generated>
 	<derived>
 	<FMProperty: #angularType type: #FamixAngularType opposite: #implementingClass>
@@ -11,10 +12,13 @@ FamixTypeScriptClass >> angularType [
 	^ self attributeAt: #angularType ifAbsent: [ nil ]
 ]
 
-{ #category : '*Famix-Angular-Entities-accessing' }
+{ #category : '*Famix-Angular-Entities' }
 FamixTypeScriptClass >> angularType: anObject [
 
+	<ignoreForCoverage>
 	<generated>
+	<package: #'Famix-Angular-Entities'>
+
 	(self attributeAt: #angularType ifAbsentPut: [nil]) == anObject ifTrue: [ ^ anObject ].
 	anObject ifNil: [ | otherSide |
 		otherSide :=  self angularType.

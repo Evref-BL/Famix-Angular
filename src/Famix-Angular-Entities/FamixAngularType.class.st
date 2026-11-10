@@ -5,7 +5,7 @@
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
 |---|
-| `ast` | `FamixAngularType` | `angularTemplate` | `FASTTypeScriptModel` | |
+| `ast` | `FamixAngularType` | `angularType` | `FASTTypeScriptProgram` | |
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
@@ -30,52 +30,50 @@ Class {
 { #category : 'meta' }
 FamixAngularType class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Type super: #FamixAngularEntity>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
-	^ self
 ]
 
 { #category : 'adding' }
 FamixAngularType >> addInjectedService: anObject [
+
+	<ignoreForCoverage>
 	<generated>
 	^ self injectedServices add: anObject
 ]
 
 { #category : 'accessing' }
 FamixAngularType >> ast [
-	"Relation named: #ast type: #FASTTypeScriptModel opposite: #angularTemplate"
+	"Relation named: #ast type: #FASTTypeScriptProgram opposite: #angularType"
 
+	<ignoreForCoverage>
 	<generated>
-	<FMProperty: #ast type: #FASTTypeScriptModel opposite: #angularTemplate>
+	<FMProperty: #ast type: #FASTTypeScriptProgram opposite: #angularType>
 	^ self attributeAt: #ast ifAbsent: [ nil ]
 ]
 
 { #category : 'accessing' }
 FamixAngularType >> ast: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	(self attributeAt: #ast ifAbsentPut: [nil]) == anObject ifTrue: [ ^ anObject ].
 	anObject ifNil: [ | otherSide |
 		otherSide :=  self ast.
 		self attributeAt: #ast put: anObject.
-		otherSide angularTemplate: nil ]
+		otherSide angularType: nil ]
 	ifNotNil: [ 
 		self attributeAt: #ast put: anObject.
-		anObject angularTemplate: self ]
-]
-
-{ #category : 'navigation' }
-FamixAngularType >> astGroup [
-	<generated>
-	<navigation: 'Ast'>
-	^ MooseSpecializedGroup with: self ast
+		anObject angularType: self ]
 ]
 
 { #category : 'accessing' }
 FamixAngularType >> implementingClass [
 	"Relation named: #implementingClass type: #FamixTypeScriptClass opposite: #angularType"
 
+	<ignoreForCoverage>
 	<generated>
 	<FMProperty: #implementingClass type: #FamixTypeScriptClass opposite: #angularType>
 	^ self attributeAt: #implementingClass ifAbsent: [ nil ]
@@ -84,6 +82,7 @@ FamixAngularType >> implementingClass [
 { #category : 'accessing' }
 FamixAngularType >> implementingClass: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	(self attributeAt: #implementingClass ifAbsentPut: [nil]) == anObject ifTrue: [ ^ anObject ].
 	anObject ifNil: [ | otherSide |
@@ -99,6 +98,7 @@ FamixAngularType >> implementingClass: anObject [
 FamixAngularType >> injectedServices [
 	"Relation named: #injectedServices type: #FamixAngularService opposite: #injectingClients"
 
+	<ignoreForCoverage>
 	<generated>
 	<derived>
 	^ injectedServices
@@ -107,6 +107,7 @@ FamixAngularType >> injectedServices [
 { #category : 'accessing' }
 FamixAngularType >> injectedServices: anObject [
 
+	<ignoreForCoverage>
 	<generated>
 	injectedServices value: anObject
 ]

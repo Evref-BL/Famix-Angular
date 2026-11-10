@@ -29,16 +29,17 @@ Class {
 { #category : 'meta' }
 FamixAngularEntity class >> annotation [
 
+	<ignoreForCoverage>
 	<FMClass: #Entity super: #MooseEntity>
-	<package: #FamixAngular>
+	<package: #'Famix-Angular-Entities'>
 	<generated>
 	<abstract>
-	^ self
 ]
 
 { #category : 'testing' }
 FamixAngularEntity class >> isAbstract [
 
+	<ignoreForCoverage>
 	<generated>
 	^ self == FamixAngularEntity
 ]
@@ -46,13 +47,23 @@ FamixAngularEntity class >> isAbstract [
 { #category : 'meta' }
 FamixAngularEntity class >> metamodel [
 
+	<ignoreForCoverage>
 	<generated>
 	^ FamixAngularModel metamodel
 ]
 
 { #category : 'testing' }
+FamixAngularEntity >> hasImmediateSource [
+
+	<ignoreForCoverage>
+	<generated>
+	^ false
+]
+
+{ #category : 'testing' }
 FamixAngularEntity >> isFileAnchor [
 
+	<ignoreForCoverage>
 	<generated>
 	^ false
 ]
@@ -60,6 +71,7 @@ FamixAngularEntity >> isFileAnchor [
 { #category : 'testing' }
 FamixAngularEntity >> isNamedEntity [
 
+	<ignoreForCoverage>
 	<generated>
 	^ false
 ]

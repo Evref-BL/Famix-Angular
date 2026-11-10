@@ -23,8 +23,10 @@ Class {
 		'famixTHasImmediateSource',
 		'fastHtmlDocument',
 		'fastScssStylesheet',
-		'fastTypeScriptModel',
-		'indexedFileAnchor'
+		'indexedFileAnchor',
+		'crossLanguageLink',
+		'htmlToTSLink',
+		'linkEnd'
 	],
 	#category : 'Famix-Angular-Generator',
 	#package : 'Famix-Angular-Generator'
@@ -62,7 +64,6 @@ FamixAngularGenerator class >> submetamodels [
 FamixAngularGenerator >> defineClasses [
 
 	super defineClasses.
-
 	angularEntity := builder newClassNamed: #Entity.
 	angularType := builder newClassNamed: #Type.
 	ngModule := builder newClassNamed: #NgModule.
@@ -71,12 +72,16 @@ FamixAngularGenerator >> defineClasses [
 	pipe := builder newClassNamed: #Pipe.
 	service := builder newClassNamed: #Service.
 	indexedFileAnchor := builder newClassNamed: #IndexedFileAnchor.
-
 	htmlTemplate := builder newClassNamed: #HTMLTemplate. "Template represents a component's view: the HTML that Angular renders for that component. "
 	artifact := builder newClassNamed: #Artifact. "this is on top of template and style for css files; because both are files :)"
 	style := builder newClassNamed: #Style.
+	route := builder newClassNamed: #Route. "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
 
-	route := builder newClassNamed: #Route "Route represents one entry in Angular's router configuration For example { path: 'users', component: UsersComponent }"
+	"Cross-language links: a defined entity (source) used from another language (reference).
+	One subclass per language pair; later SCSS-HTML, JSON-TS, ..."
+	crossLanguageLink := builder newClassNamed: #CrossLanguageLink.
+	htmlToTSLink := builder newClassNamed: #HTMLToTSLink.
+	linkEnd := builder newClassNamed: #LinkEnd "one side of a link: a FAST entity and the FAST root of its file"
 ]
 
 { #category : 'definition' }
@@ -87,10 +92,8 @@ FamixAngularGenerator >> defineHierarchy [
 
 	sourceAnchor --|> famixTSourceAnchor.
 	"sourceLanguage --|> famixTSourceLanguage." "no need for it now"
-
 	indexedFileAnchor --|> sourceAnchor.
 	indexedFileAnchor --|> #TIndexedFileNavigation.
-
 	sourceTextAnchor --|> sourceAnchor.
 	sourceTextAnchor --|> famixTHasImmediateSource.
 
@@ -112,19 +115,29 @@ FamixAngularGenerator >> defineHierarchy [
 
 	component --|> tDeclarable.
 	directive --|> tDeclarable.
-	pipe --|> tDeclarable
+	pipe --|> tDeclarable.
+
+	htmlToTSLink --|> crossLanguageLink
 ]
 
 { #category : 'definition' }
 FamixAngularGenerator >> defineProperties [
 
 	super defineProperties.
-
 	component property: #selector type: #String.
 	pipe property: #pipeName type: #String.
 	"htmlTemplate property: #isInline type: #Boolean."
 	htmlTemplate property: #templateUrl type: #String.
-	route property: #path type: #String
+	route property: #path type: #String.
+
+	"what produced the link, e.g. 'ngFor', 'ngIf'"
+	crossLanguageLink property: #kind type: #String.
+	"both ends are FamixAngularLinkEnd; plain properties, so a link end does not point back to its link"
+	crossLanguageLink property: #source type: #Object.
+	crossLanguageLink property: #reference type: #Object.
+	"FAST entities of any language (FASTTEntity users); untyped to keep FAST metamodels untouched"
+	linkEnd property: #entity type: #Object.
+	linkEnd property: #container type: #Object
 
 	"shared artifact properties"
 	"artifact property: #isInline type: #Boolean."
@@ -136,30 +149,25 @@ FamixAngularGenerator >> defineProperties [
 { #category : 'definition' }
 FamixAngularGenerator >> defineRelations [
 
-	| tsClass |
-	"aless not sure about this"
+	| tsClass tsProgram |
 	super defineRelations.
 
 	"remote entities"
 	tsClass := self remoteEntity: #Class withPrefix: #FamixTypeScript.
+	tsProgram := self remoteEntity: #Program withPrefix: #FASTTypeScript.
 	fastHtmlDocument := self
 		                    remoteEntity: #Document
 		                    withPrefix: #FASTHTML.
-
 	fastScssStylesheet := self
 		                      remoteEntity: #Stylesheet
 		                      withPrefix: #FASTSCSS.
-
-	fastTypeScriptModel := self
-		                         remoteEntity: #Model
-		                         withPrefix: #FASTTypeScript.
 
 	"each Angular role is backed by exactly one TS class (1-1 association)"
 	(angularType property: #implementingClass)
 	- (tsClass property: #angularType).
 
-	(angularType property: #ast)
-	<>- (fastTypeScriptModel property: #angularTemplate).
+	"the parsed AST (FAST root) of that TS class"
+	(angularType property: #ast) <>- (tsProgram property: #angularType).
 
 	"module declares many declarables; a declarable is declared by 0..1 module"
 	(ngModule property: #declarations)
@@ -176,6 +184,7 @@ FamixAngularGenerator >> defineRelations [
 	"a component owns one template"
 	(component property: #htmlTemplate)
 	<>- (htmlTemplate property: #component).
+
 	"a component owns many stylesheets"
 	(component property: #styles) <>-* (style property: #component).
 
@@ -187,14 +196,18 @@ FamixAngularGenerator >> defineRelations [
 	(htmlTemplate property: #usedComponents)
 	*-* (component property: #usingTemplates).
 
-	(htmlTemplate property: #htmlAstRoot)
+	(htmlTemplate property: #ast)
 	<>- (fastHtmlDocument property: #angularTemplate).
 
-	(style property: #styleAstRoot)
+	(style property: #ast)
 	<>- (fastScssStylesheet property: #angularStyle).
 
 	"routing"
-	(route property: #targetComponent) -* (component property: #routes)
+	(route property: #targetComponent) -* (component property: #routes).
+
+	"cross-language links are owned by their component"
+	(component property: #crossLanguageLinks)
+	<>-* (crossLanguageLink property: #component)
 ]
 
 { #category : 'definition' }

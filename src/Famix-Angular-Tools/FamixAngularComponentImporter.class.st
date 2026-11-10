@@ -90,10 +90,10 @@ FamixAngularComponentImporter >> fillArtifact: anArtifact name: aName inlineCont
 	ast := aParser parse: aString.
 
 	anArtifact class = FamixAngularHTMLTemplate ifTrue: [
-		anArtifact htmlAstRoot: (ast allWithType: FASTHTMLDocument) first ].
+		anArtifact ast: (ast allWithType: FASTHTMLDocument) first ].
 
 	anArtifact class = FamixAngularStyle ifTrue: [
-		anArtifact styleAstRoot: (ast allWithType: FASTSCSSStylesheet) first ].
+		anArtifact ast: (ast allWithType: FASTSCSSStylesheet) first ].
 
 	^ anArtifact
 ]
@@ -130,10 +130,10 @@ FamixAngularComponentImporter >> fillArtifact: anArtifact name: aName path: aPat
 	ast := content ifNotNil: [ :c | aParser parse: c ].
 
 	anArtifact class = FamixAngularHTMLTemplate ifTrue: [
-		anArtifact htmlAstRoot: (ast allWithType: FASTHTMLDocument) first ].
+		anArtifact ast: (ast allWithType: FASTHTMLDocument) first ].
 
 	anArtifact class = FamixAngularStyle ifTrue: [
-		anArtifact styleAstRoot: (ast allWithType: FASTSCSSStylesheet) first ].
+		anArtifact ast: (ast allWithType: FASTSCSSStylesheet) first ].
 
 	^ anArtifact
 ]
