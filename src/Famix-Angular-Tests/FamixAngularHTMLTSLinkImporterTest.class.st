@@ -33,6 +33,19 @@ FamixAngularHTMLTSLinkImporterTest >> linksFor: aClassSource template: anHTMLSou
 ]
 
 { #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testInterpolationInAttributeValueOfTemplateVariableIsNotLinked [
+
+	| links |
+	links := self
+		         linksFor: 'class C { items = []; item = 1; }'
+		         template:
+		         '<li *ngFor="let item of items" title="{{ item }}">x</li>'.
+	self
+		assertCollection: (links collect: #name)
+		hasSameElements: #( '*ngFor="let item of items"' )
+]
+
+{ #category : 'tests' }
 FamixAngularHTMLTSLinkImporterTest >> testInterpolationLinksOnlyTheObjectOfAMemberAccess [
 
 	| links |
@@ -74,6 +87,26 @@ FamixAngularHTMLTSLinkImporterTest >> testInterpolationReferencePositionIsInTheH
 				 copyFrom: link reference entity startPos
 				 to: link reference entity endPos)
 		equals: 'count'
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testInterpolationsInAttributeValuesAreLinked [
+
+	| html links |
+	html := '<img src="{{ baseUrl }}/logo.png">
+<a title="Hello {{ first }} {{ last }}">x</a>'.
+	links := self
+		         linksFor: 'class C { baseUrl = 1; first = 2; last = 3; }'
+		         template: html.
+	self
+		assertCollection: (links collect: #name)
+		hasSameElements: #( '{{ baseUrl }}' '{{ first }}' '{{ last }}' ).
+	links do: [ :link |
+			self
+				assert: (html
+						 copyFrom: link reference entity startPos
+						 to: link reference entity endPos)
+				equals: link reference name ]
 ]
 
 { #category : 'tests' }

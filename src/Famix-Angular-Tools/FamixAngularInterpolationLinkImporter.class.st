@@ -1,5 +1,5 @@
 "
-I link the members read in text interpolations, e.g. user in <p>{{ user.name }}</p>.
+I link the members read in {{ }} interpolations, in text (<p>{{ user.name }}</p>) and in attribute values (<img src=""{{ baseUrl }}/logo.png"">).
 "
 Class {
 	#name : 'FamixAngularInterpolationLinkImporter',
@@ -21,9 +21,12 @@ FamixAngularInterpolationLinkImporter >> parseInterpolations: aText [
 
 { #category : 'html' }
 FamixAngularInterpolationLinkImporter >> usagesIn: aDocument [
-	"FASTHTML text -> each {{ }} interpolation it contains"
+	"FASTHTML text or attribute value -> each {{ }} interpolation it contains,
+	e.g. <p>{{ user.name }}</p> or <a title=""Hello {{ first }} {{ last }}"">"
+
 	^ (aDocument allContainedEntities select: [ :e |
-		   e class = FASTHTMLText and: [
-			   e sourceCode includesSubstring: '{{' ] ]) flatCollect: [ :text |
-		  (self parseInterpolations: text) collect: [ :each | text -> each ] ]
+			   (e class = FASTHTMLText or: [ e class = FASTHTMLAttributeValue ])
+				   and: [ e sourceCode includesSubstring: '{{' ] ]) flatCollect: [
+		  :node |
+		  (self parseInterpolations: node) collect: [ :each | node -> each ] ]
 ]
