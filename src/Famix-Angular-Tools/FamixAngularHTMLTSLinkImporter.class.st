@@ -13,6 +13,11 @@ Class {
 	#package : 'Famix-Angular-Tools'
 }
 
+{ #category : 'testing' }
+FamixAngularHTMLTSLinkImporter class >> isAbstract [
+	^ self = FamixAngularHTMLTSLinkImporter
+]
+
 { #category : 'angular' }
 FamixAngularHTMLTSLinkImporter >> declaredNamesIn: aDirective [
 	"let item of ..., let i = index, ... as alias"

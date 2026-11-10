@@ -8,6 +8,11 @@ Class {
 	#package : 'Famix-Angular-Tools'
 }
 
+{ #category : 'testing' }
+FamixAngularStructuralDirectiveLinkImporter class >> isAbstract [
+	^ self = FamixAngularStructuralDirectiveLinkImporter
+]
+
 { #category : 'accessing' }
 FamixAngularStructuralDirectiveLinkImporter >> directive [
 	"The HTML attribute name of the directive I link, e.g. *ngFor"
