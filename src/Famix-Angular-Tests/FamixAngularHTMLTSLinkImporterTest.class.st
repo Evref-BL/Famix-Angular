@@ -33,6 +33,26 @@ FamixAngularHTMLTSLinkImporterTest >> linksFor: aClassSource template: anHTMLSou
 ]
 
 { #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testCanonicalBindPrefixIsLinked [
+
+	| html link |
+	html := '<div>
+  <img bind-src="imageUrl">
+</div>'.
+	link := (self
+		         linksFor: 'class C { imageUrl = 1; src = 2; }'
+		         template: html) first.
+	self assert: link name equals: 'bind-src="imageUrl"'.
+	self assert: link kind equals: 'propertyBinding'.
+	self assert: link reference name equals: 'imageUrl'.
+	self
+		assert: (html
+				 copyFrom: link reference entity startPos
+				 to: link reference entity endPos)
+		equals: 'imageUrl'
+]
+
+{ #category : 'tests' }
 FamixAngularHTMLTSLinkImporterTest >> testInterpolationInAttributeValueOfTemplateVariableIsNotLinked [
 
 	| links |
@@ -216,6 +236,19 @@ FamixAngularHTMLTSLinkImporterTest >> testPropertyBindingLinksReadMembersOnly [
 	self
 		assert: (links collect: #kind) asSet asArray
 		equals: #( 'propertyBinding' )
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testPropertyBindingObjectKeysAreNotLinked [
+
+	| links |
+	links := self
+		         linksFor: 'class C { a = 1; b = 2; total = 3; }'
+		         template:
+		         '<app-x [config]="{ a: 1, b: [1, 2] }"></app-x><app-y [c]="{ a: total }"></app-y>'.
+	self
+		assertCollection: (links collect: [ :each | each reference name ])
+		hasSameElements: #( 'total' )
 ]
 
 { #category : 'tests' }

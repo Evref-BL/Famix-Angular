@@ -57,7 +57,8 @@ FamixAngularHTMLTSLinkImporter >> identifiersIn: aDirective [
 FamixAngularHTMLTSLinkImporter >> isComponentRead: anIdentifier [
 	"An identifier is read from the component scope unless it is the directive name, a declared
 	variable (let x / as x), the 'of' keyword, a member access (a.b -> b), a pipe name,
-	a bound property name ([src] -> src), a template reference (else tpl) or a context variable value (let i = index)"
+	a bound property name ([src] -> src), an object key ({ a: x } -> a), a template reference (else tpl)
+	or a context variable value (let i = index)"
 
 	({
 		 anIdentifier structuralDirectiveOwner.
@@ -66,8 +67,9 @@ FamixAngularHTMLTSLinkImporter >> isComponentRead: anIdentifier [
 		 anIdentifier structuralExpressionAliasOwner.
 		 anIdentifier memberExpressionPropertyOwner.
 		 anIdentifier pipeCallNameRefOwner.
-		 anIdentifier bindingNameOwner } anySatisfy: [ :owner |
-		 owner notNil ]) ifTrue: [ ^ false ].
+		 anIdentifier bindingNameOwner.
+		 anIdentifier pairKeyOwner } anySatisfy: [ :owner | owner notNil ])
+		ifTrue: [ ^ false ].
 	(anIdentifier allContainers first isKindOf:
 		 FASTAngularStructuralExpression) ifTrue: [ ^ false ].
 	^ (self isInLetAssignment: anIdentifier) not
@@ -91,11 +93,10 @@ FamixAngularHTMLTSLinkImporter >> kind [
 
 { #category : 'running' }
 FamixAngularHTMLTSLinkImporter >> linkFrom: aSourceEnd to: aReferenceEnd usage: aUsage for: aComponent [
-	"The link is named after its Angular code, e.g. *ngFor='let item of items' or {{ user.name }}"
 
 	| link |
 	link := FamixAngularHTMLToTSLink new
-		        name: aUsage value sourceCode;
+		        name: (self linkNameOf: aUsage);
 		        kind: self kind;
 		        source: aSourceEnd;
 		        reference: aReferenceEnd;
@@ -106,6 +107,13 @@ FamixAngularHTMLTSLinkImporter >> linkFrom: aSourceEnd to: aReferenceEnd usage: 
 			aSourceEnd.
 			aReferenceEnd }.
 	^ link
+]
+
+{ #category : 'running' }
+FamixAngularHTMLTSLinkImporter >> linkNameOf: aUsage [
+	"Links are named after their Angular code, e.g. *ngFor='let item of items' or {{ user.name }}"
+
+	^ aUsage value sourceCode
 ]
 
 { #category : 'running' }
