@@ -199,6 +199,40 @@ FamixAngularHTMLTSLinkImporterTest >> testPipesAliasesAndTemplateReferencesAreNo
 ]
 
 { #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testPropertyBindingLinksReadMembersOnly [
+
+	| links |
+	links := self
+		         linksFor:
+		         'class C { imageUrl = 1; isLoading = 2; src = 3; disabled = 4; }'
+		         template: '<img [src]="imageUrl">
+<button [disabled]="isLoading">x</button>'.
+	self
+		assertCollection:
+		(links collect: [ :each | each name -> each reference name ])
+		hasSameElements: {
+				('[src]="imageUrl"' -> 'imageUrl').
+				('[disabled]="isLoading"' -> 'isLoading') }.
+	self
+		assert: (links collect: #kind) asSet asArray
+		equals: #( 'propertyBinding' )
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testPropertyBindingWithMemberAccessPipeAndTemplateVariable [
+
+	| links |
+	links := self
+		         linksFor:
+		         'class C { items = []; image = 1; big = 2; isOn = 3; active = 4; item = 5; }'
+		         template:
+		         '<li *ngFor="let item of items" [title]="item" [class.active]="isOn"><img [src]="image.big | async"></li>'.
+	self
+		assertCollection: (links collect: [ :each | each reference name ])
+		hasSameElements: #( 'items' 'isOn' 'image' )
+]
+
+{ #category : 'tests' }
 FamixAngularHTMLTSLinkImporterTest >> testReferencePositionIsInTheHTMLFile [
 
 	| html reference |
