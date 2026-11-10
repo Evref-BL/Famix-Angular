@@ -56,9 +56,9 @@ FamixAngularHTMLTSLinkImporter >> identifiersIn: aDirective [
 { #category : 'angular' }
 FamixAngularHTMLTSLinkImporter >> isComponentRead: anIdentifier [
 	"An identifier is read from the component scope unless it is the directive name, a declared
-	variable (let x / as x), the 'of' keyword, a member access (a.b -> b), a pipe name,
-	a bound property name ([src] -> src), an object key ({ a: x } -> a), a template reference (else tpl)
-	or a context variable value (let i = index)"
+	variable (let x / as x), the 'of' keyword, a member access (a.b -> b), a pipe name, an object key
+	({ a: x } -> a), part of a binding name ([class.active], [style.width.px], (keyup.enter)), a template
+	reference (else tpl) or a context variable value (let i = index)"
 
 	({
 		 anIdentifier structuralDirectiveOwner.
@@ -67,9 +67,11 @@ FamixAngularHTMLTSLinkImporter >> isComponentRead: anIdentifier [
 		 anIdentifier structuralExpressionAliasOwner.
 		 anIdentifier memberExpressionPropertyOwner.
 		 anIdentifier pipeCallNameRefOwner.
-		 anIdentifier bindingNameOwner.
 		 anIdentifier pairKeyOwner } anySatisfy: [ :owner | owner notNil ])
 		ifTrue: [ ^ false ].
+	(anIdentifier allContainers anySatisfy: [ :each |
+			 each class = FASTAngularBindingName or: [
+				 each class = FASTAngularClassBinding ] ]) ifTrue: [ ^ false ].
 	(anIdentifier allContainers first isKindOf:
 		 FASTAngularStructuralExpression) ifTrue: [ ^ false ].
 	^ (self isInLetAssignment: anIdentifier) not

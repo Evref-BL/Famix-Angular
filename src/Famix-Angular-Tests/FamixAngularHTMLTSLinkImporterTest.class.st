@@ -33,6 +33,20 @@ FamixAngularHTMLTSLinkImporterTest >> linksFor: aClassSource template: anHTMLSou
 ]
 
 { #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testBindingNamesAreNeverLinked [
+
+	| links |
+	links := self
+		         linksFor:
+		         'class C { keyup = 1; enter = 2; class = 3; active = 4; send() {} isOn = 5; }'
+		         template:
+		         '<input (keyup.enter)="send()" [class.active]="isOn">'.
+	self
+		assertCollection: (links collect: [ :each | each reference name ])
+		hasSameElements: #( 'send' 'isOn' )
+]
+
+{ #category : 'tests' }
 FamixAngularHTMLTSLinkImporterTest >> testCanonicalBindPrefixIsLinked [
 
 	| html link |
@@ -50,6 +64,45 @@ FamixAngularHTMLTSLinkImporterTest >> testCanonicalBindPrefixIsLinked [
 				 copyFrom: link reference entity startPos
 				 to: link reference entity endPos)
 		equals: 'imageUrl'
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testCanonicalOnPrefixIsLinked [
+
+	| html link |
+	html := '<div>
+  <button on-click="save()">x</button>
+</div>'.
+	link := (self linksFor: 'class C { save() {} }' template: html) first.
+	self assert: link name equals: 'on-click="save()"'.
+	self assert: link kind equals: 'eventBinding'.
+	self
+		assert: (html
+				 copyFrom: link reference entity startPos
+				 to: link reference entity endPos)
+		equals: 'save'
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testEventBindingLinksCalledMethods [
+
+	| links |
+	links := self
+		         linksFor: 'class C { save(e) {} a() {} b() {} click = 1; }'
+		         template: '<button (click)="save()">x</button>
+<button (click)="save($event)">x</button>
+<button (click)="a(); b()">x</button>'.
+	self
+		assertCollection:
+		(links collect: [ :each | each name -> each reference name ])
+		hasSameElements: {
+				('(click)="save()"' -> 'save').
+				('(click)="save($event)"' -> 'save').
+				('(click)="a(); b()"' -> 'a').
+				('(click)="a(); b()"' -> 'b') }.
+	self
+		assert: (links collect: #kind) asSet asArray
+		equals: #( 'eventBinding' )
 ]
 
 { #category : 'tests' }
