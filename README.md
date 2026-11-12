@@ -1,5 +1,7 @@
 # Famix-Angular
 
+![Moose version](https://img.shields.io/badge/Moose-13-%23aac9ff.svg)
+
 This project is a Famix metamodel for Angular. It is a project under development and experimentation. It is the first project to cover a framework and not a language. We'll see how it continues.
 
 # Logic behind
