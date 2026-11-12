@@ -46,6 +46,14 @@ FamixAngularHTMLTSLinkImporter >> endOn: aFASTEntity in: aContainer [
 		  yourself
 ]
 
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> hasStructuralDirective: anElement [
+
+	^ (self openingTagOf: anElement) containedEntities anySatisfy: [ :e |
+		  e class = FASTHTMLAttribute and: [
+			  (self nameOf: e) beginsWith: '*' ] ]
+]
+
 { #category : 'angular' }
 FamixAngularHTMLTSLinkImporter >> identifiersIn: aDirective [
 
@@ -84,6 +92,14 @@ FamixAngularHTMLTSLinkImporter >> isInLetAssignment: anIdentifier [
 			  c class = FASTAngularStructuralAssignment and: [
 					  c containedEntities anySatisfy: [ :e |
 						  e class = FASTAngularSpecialKeyword ] ] ]
+]
+
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> isTemplateReference: anAttribute [
+
+	| name |
+	name := self nameOf: anAttribute.
+	^ (name beginsWith: '#') or: [ name beginsWith: 'ref-' ]
 ]
 
 { #category : 'html' }
@@ -143,15 +159,17 @@ FamixAngularHTMLTSLinkImporter >> linkTemplateOf: aComponent [
 ]
 
 { #category : 'html' }
-FamixAngularHTMLTSLinkImporter >> localsVisibleAt: anAttribute in: directives [
-	"Template variables declared by directives on the attribute's element or on enclosing elements"
+FamixAngularHTMLTSLinkImporter >> localsVisibleAt: anHTMLNode in: directives [
+	"Template variables visible at anHTMLNode: declared by structural directives on its element or enclosing elements
+	(let x of ..., ... as x), and template references (#x, ref-x) in scope"
 
 	| elements |
-	elements := anAttribute allContainers select: [ :e |
+	elements := anHTMLNode allContainers select: [ :e |
 		            e class = FASTHTMLElement ].
-	^ (directives keys select: [ :each |
-		   elements includes: (self elementOf: each) ]) flatCollect: [ :each |
-		  self declaredNamesIn: (directives at: each) ]
+	^ ((directives keys select: [ :each |
+		    elements includes: (self elementOf: each) ]) flatCollect: [
+		   :each | self declaredNamesIn: (directives at: each) ])
+	  , (self templateReferencesVisibleAt: anHTMLNode)
 ]
 
 { #category : 'typescript' }
@@ -189,6 +207,13 @@ FamixAngularHTMLTSLinkImporter >> nameOf: aDeclaration as: anIdentifierClass [
 		  detect: [ :e | e class = anIdentifierClass ]
 		  ifFound: [ :identifier | identifier sourceCode ]
 		  ifNone: [ nil ]
+]
+
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> openingTagOf: anElement [
+
+	^ anElement containedEntities detect: [ :e |
+		  e class = FASTHTMLStartTag or: [ e class = FASTHTMLSelfClosingTag ] ]
 ]
 
 { #category : 'html' }
@@ -237,6 +262,55 @@ FamixAngularHTMLTSLinkImporter >> structuralDirectivesIn: aDocument [
 			(self parseDirective: attribute) ifNotNil: [ :directive |
 				directives at: attribute put: directive ] ].
 	^ directives
+]
+
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> tagNameOf: anElement [
+
+	^ self nameOf: (self openingTagOf: anElement) as: FASTHTMLTagName
+]
+
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> templateReferenceNameOf: anAttribute [
+
+	| name |
+	name := self nameOf: anAttribute.
+	^ name allButFirst: ((name beginsWith: '#')
+			   ifTrue: [ 1 ]
+			   ifFalse: [ 'ref-' size ])
+]
+
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> templateReferenceScopeOf: anAttribute [
+	"The element a template reference is limited to, or nil when it is visible in the whole template:
+	the closest element carrying a structural directive (its own included), or enclosing <ng-template>
+	(a reference ON an <ng-template>, as in else tpl, is visible outside it)"
+
+	| own |
+	own := self elementOf: anAttribute.
+	^ (anAttribute allContainers select: [ :e |
+		   e class = FASTHTMLElement ])
+		  detect: [ :element |
+				  (self hasStructuralDirective: element) or: [
+					  element ~~ own and: [
+						  (self tagNameOf: element) = 'ng-template' ] ] ]
+		  ifNone: [ nil ]
+]
+
+{ #category : 'html' }
+FamixAngularHTMLTSLinkImporter >> templateReferencesVisibleAt: anHTMLNode [
+	"Names of the template references (#x, #x='ngForm', ref-x) in scope at anHTMLNode"
+
+	| containers |
+	containers := anHTMLNode allContainers.
+	^ (containers last allContainedEntities select: [ :e |
+		   e class = FASTHTMLAttribute and: [ self isTemplateReference: e ] ])
+		  select: [ :reference |
+				  (self templateReferenceScopeOf: reference)
+					  ifNil: [ true ]
+					  ifNotNil: [ :scope | containers includes: scope ] ]
+		  thenCollect: [ :reference |
+		  self templateReferenceNameOf: reference ]
 ]
 
 { #category : 'html' }

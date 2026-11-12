@@ -351,6 +351,44 @@ FamixAngularHTMLTSLinkImporterTest >> testReferencePositionIsInTheHTMLFile [
 ]
 
 { #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testTemplateReferenceScope [
+
+	| links |
+	links := self
+		         linksFor: 'class C { c = 1; inner = 2; tpl = 3; r = 4; }'
+		         template:
+			         '<div *ngIf="c; else tpl"><b #r>{{ r }}</b></div>
+<p>{{ r }}</p>
+<ng-template #tpl><i #inner>{{ inner }}</i></ng-template>
+<p>{{ inner }}</p>'.
+	self
+		assertCollection:
+		(links collect: [ :each | each name -> each reference name ])
+		hasSameElements: {
+				('*ngIf="c; else tpl"' -> 'c').
+				('{{ r }}' -> 'r').
+				('{{ inner }}' -> 'inner') }
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testTemplateReferencesAreNotLinked [
+
+	| links |
+	links := self
+		         linksFor:
+		         'class C { greet(v) {} submit(f) {} nameInput = 1; f = 2; child = 3; other = 4; }'
+		         template: '<input #nameInput>
+<button (click)="greet(nameInput.value)">x</button>
+<form #f="ngForm" (ngSubmit)="submit(f)"></form>
+<app-child #child></app-child>
+<input ref-other>
+<p>{{ child.x }} {{ other.value }}</p>'.
+	self
+		assertCollection: (links collect: [ :each | each reference name ])
+		hasSameElements: #( 'greet' 'submit' )
+]
+
+{ #category : 'tests' }
 FamixAngularHTMLTSLinkImporterTest >> testTemplateVariablesAreNotLinked [
 
 	| links |
