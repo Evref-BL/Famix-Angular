@@ -101,6 +101,24 @@ FamixAngularHTMLTSLinkImporterTest >> testCanonicalOnPrefixIsLinked [
 ]
 
 { #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testCustomStructuralDirectiveLinksItsValue [
+
+	| links |
+	links := self
+		         linksFor:
+		         'class C { role = 1; appPermission = 2; items = []; }'
+		         template: '<div *appPermission="role">x</div>
+<div *appPermission="''admin''">x</div>
+<li *ngFor="let item of items">x</li>'.
+	self
+		assertCollection:
+		(links collect: [ :each | each reference name -> each kind ])
+		hasSameElements: {
+				('role' -> 'structuralDirective').
+				('items' -> 'ngFor') }
+]
+
+{ #category : 'tests' }
 FamixAngularHTMLTSLinkImporterTest >> testEventBindingLinksCalledMethods [
 
 	| links |
@@ -274,6 +292,26 @@ FamixAngularHTMLTSLinkImporterTest >> testNgIfLinksFieldsMethodsAndParameterProp
 ]
 
 { #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testNgSwitchLinksSwitchValueAndCaseMembers [
+
+	| links |
+	links := self
+		         linksFor:
+		         'class C { mode = 1; caseB = 2; ngSwitch = 3; a = 4; }'
+		         template: '<div [ngSwitch]="mode">
+  <p *ngSwitchCase="''a''">A</p>
+  <p *ngSwitchCase="caseB">B</p>
+  <p *ngSwitchDefault>Other</p>
+</div>'.
+	self
+		assertCollection:
+		(links collect: [ :each | each reference name -> each kind ])
+		hasSameElements: {
+				('mode' -> 'propertyBinding').
+				('caseB' -> 'ngSwitchCase') }
+]
+
+{ #category : 'tests' }
 FamixAngularHTMLTSLinkImporterTest >> testPipesAliasesAndTemplateReferencesAreNotLinked [
 
 	| links |
@@ -429,4 +467,18 @@ FamixAngularHTMLTSLinkImporterTest >> testTwoWayBindingLinksBoundMember [
 	self
 		assert: (links collect: #kind) asSet asArray
 		equals: #( 'twoWayBinding' )
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testUnparsableDirectivesDoNotBreakTheImport [
+
+	| links |
+	links := self
+		         linksFor:
+		         'class C { user = 1; ok = 2; ko = 3; count = 4; let = 5; then = 6; }'
+		         template: '<div *ngIf="user; then ok; else ko">x</div>
+<div *appRepeat="count; let n">x</div>'.
+	self
+		assertCollection: (links collect: [ :each | each reference name ])
+		hasSameElements: #( 'user' 'count' )
 ]

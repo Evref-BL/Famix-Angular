@@ -237,9 +237,13 @@ FamixAngularHTMLTSLinkImporter >> parseDirective: anAttribute [
 
 { #category : 'angular' }
 FamixAngularHTMLTSLinkImporter >> readsIn: aDirective [
+	"Identifiers read from the component scope. Those FASTAngular could not parse (inside a FASTAngularERROR,
+	e.g. 'then tpl' or a bare 'let n') are skipped: they have no source text."
 
 	^ (self identifiersIn: aDirective) select: [ :id |
-		  self isComponentRead: id ]
+			  (id allContainers anySatisfy: [ :each |
+				   each class = FASTAngularERROR ]) not and: [
+				  self isComponentRead: id ] ]
 ]
 
 { #category : 'running' }
