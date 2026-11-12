@@ -67,6 +67,23 @@ FamixAngularHTMLTSLinkImporterTest >> testCanonicalBindPrefixIsLinked [
 ]
 
 { #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testCanonicalBindonPrefixIsLinked [
+
+	| html link |
+	html := '<div>
+  <input bindon-ngModel="name">
+</div>'.
+	link := (self linksFor: 'class C { name = 1; }' template: html) first.
+	self assert: link name equals: 'bindon-ngModel="name"'.
+	self assert: link kind equals: 'twoWayBinding'.
+	self
+		assert: (html
+				 copyFrom: link reference entity startPos
+				 to: link reference entity endPos)
+		equals: 'name'
+]
+
+{ #category : 'tests' }
 FamixAngularHTMLTSLinkImporterTest >> testCanonicalOnPrefixIsLinked [
 
 	| html link |
@@ -345,4 +362,33 @@ FamixAngularHTMLTSLinkImporterTest >> testTemplateVariablesAreNotLinked [
 		assert:
 		(links collect: [ :l | l reference entity sourceCode ]) asArray
 		equals: #( 'items' )
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testTwoWayBindingIsNotAlsoAPropertyOrEventBinding [
+
+	| links |
+	links := self
+		         linksFor: 'class C { name = 1; }'
+		         template: '<input [(ngModel)]="name">'.
+	self assert: links size equals: 1
+]
+
+{ #category : 'tests' }
+FamixAngularHTMLTSLinkImporterTest >> testTwoWayBindingLinksBoundMember [
+
+	| links |
+	links := self
+		         linksFor: 'class C { name = 1; ngModel = 2; user = 3; }'
+		         template:
+		         '<input [(ngModel)]="name"><input [(ngModel)]="user.name">'.
+	self
+		assertCollection:
+		(links collect: [ :each | each name -> each reference name ])
+		hasSameElements: {
+				('[(ngModel)]="name"' -> 'name').
+				('[(ngModel)]="user.name"' -> 'user') }.
+	self
+		assert: (links collect: #kind) asSet asArray
+		equals: #( 'twoWayBinding' )
 ]
